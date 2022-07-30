@@ -1,0 +1,14 @@
+Character can jump a maximum of 1 box unit in blender in a single jump. A double jump increasses that by half a box.
+The character is 0.4 of a box unit.
+In a single jump, character can move 2.5 box units left/right.
+In a double jump, character can move ~5 box units left/right.
+Wall jump, character can move 1.5-2 box units before he starts falling down.
+Wall jump can jump as high as normal jump.
+Change of direction factor applies the same for wall jump as the mid-air one.
+Bash can jump around 4 box units (both horizontally & vertically)
+
+Lantern activates from half a box unity away.
+Dodge redirect carries you around 3 box units if the direction is lightly above horizontal. Gravity takes hold as normal (slow at first and then caps to it's upper value) and the horizontal speed doesn't decrease at all.
+Dodge redirect can properl you upwards to a maximum of 2-2.5 box units.
+
+Base map scale is set to 4 in unity to fit measurements above.
