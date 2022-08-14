@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - ClimbableWall
+  - GroundPlatform
+  - BreakablePlatform
   layers:
   - Default
   - TransparentFX
