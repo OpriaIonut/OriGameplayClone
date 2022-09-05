@@ -11,6 +11,13 @@ public class CharacterMovement : MonoBehaviour
     public float midairAcceleration = 10.0f; //In mid-air, if we change direction, we need to accelerate from 0 to a certain speed.
     public float wallJumpSpeed = 100.0f;
     public float wallJumpDeacc = 1.0f;
+    public float dodgeRedirectForce = 100.0f;
+    public float dodgeRedirectSlowDown = 1.0f;
+
+    [Header("Lanterns")]
+    public float lanternRange;
+    public LayerMask lanternLayer;
+    public RectTransform arrowSprite;
 
     private bool isGrounded = true;     //Did we hit a ground collider?
     private bool canWallJump = false;  //Did we hit a climbable wall collider?
@@ -24,8 +31,11 @@ public class CharacterMovement : MonoBehaviour
     private float previousMoveDir = 1.0f;   //Used to detect change of direction in mid-air
     private float accelerationFactor = 1.0f;//Goes from 0 to 1 when we change direction in mid-air
     private float wallJumpPropulsion = 0.0f;//Is used to propell us in an opposite direction to the wall when doing wall jump.
+    private Vector3 dodgeRedirectVelocity = Vector3.zero;
 
     private Rigidbody rb;
+
+    private Transform lanternPos;
 
     private void Start()
     {
@@ -43,20 +53,58 @@ public class CharacterMovement : MonoBehaviour
             canJump = true;
             jumpTimeCounter = Time.time;
         }
+
+        bool focusingLantern = false;
+        if (Input.GetMouseButton(1) && lanternPos != null)
+        {
+            focusingLantern = true;
+            Time.timeScale = 0.4f;
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+            Vector3 direction = mouseWorldPos - lanternPos.position;
+
+            //Debug.DrawLine(lanternPos.position, mouseWorldPos, Color.red);
+            arrowSprite.gameObject.SetActive(true);
+
+            arrowSprite.position = Camera.main.WorldToScreenPoint(lanternPos.position);
+            arrowSprite.rotation = Quaternion.LookRotation(Vector3.forward, direction.normalized);
+        }
+        if (Input.GetMouseButtonUp(1) && lanternPos != null)
+        {
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+            Vector3 direction = mouseWorldPos - lanternPos.position;
+
+            dodgeRedirectVelocity = direction.normalized * dodgeRedirectForce;
+            rb.velocity = direction.normalized * dodgeRedirectForce;
+            arrowSprite.gameObject.SetActive(false);
+        }
+        if (!focusingLantern)
+        {
+            Time.timeScale = 1.0f;
+            arrowSprite.gameObject.SetActive(false);
+        }
     }
 
     private void FixedUpdate()
     {
-        float currentMoveDir = horizontalInput > 0.0f ? 1.0f : -1.0f;
+        MovementLogic();
+    }
 
-        //Rotate player to face move direction
-        if (horizontalInput != 0.0f)
-        {
-            if (currentMoveDir != previousMoveDir)
-                wallJumpPropulsion = 0.0f;
-        }
+    public void EnteredLanternRange(Transform lanternPosition)
+    {
+        lanternPos = lanternPosition;
+    }
+
+    public void ExitLanternRange()
+    {
+        lanternPos = null;
+    }
+
+    private void MovementLogic()
+    {
+        float currentMoveDir = horizontalInput > 0.0f ? 1.0f : -1.0f;
         if (rb.velocity.x != 0.0f)
         {
+            //Rotate player to face move direction
             float rotAngle = rb.velocity.x > 0.0f ? 90.0f : -90.0f;
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, rotAngle, transform.rotation.eulerAngles.z);
         }
@@ -75,7 +123,9 @@ public class CharacterMovement : MonoBehaviour
         if (wallDirection != currentMoveDir)
             xVel += wallJumpPropulsion * wallDirection;
 
-        rb.velocity = new Vector3(xVel * Time.fixedDeltaTime, rb.velocity.y, rb.velocity.z);
+        rb.velocity = new Vector3(xVel * Time.fixedDeltaTime, rb.velocity.y, rb.velocity.z) + dodgeRedirectVelocity * Time.fixedDeltaTime;
+
+        dodgeRedirectVelocity = Vector3.Lerp(dodgeRedirectVelocity, Vector3.zero, Time.fixedDeltaTime * dodgeRedirectSlowDown);
 
         wallJumpPropulsion = Mathf.Clamp(wallJumpPropulsion - wallJumpDeacc * Time.fixedDeltaTime, 0.0f, wallJumpSpeed);
 
@@ -93,7 +143,7 @@ public class CharacterMovement : MonoBehaviour
                 float jumpCounterMax = jumpInputTime;
 
                 //Based on if it is first jump or second jump, change the properties
-                if(!isGrounded && canWallJump)
+                if (!isGrounded && canWallJump)
                 {
                     wallJumpPropulsion = wallJumpSpeed;
                     canWallJump = false;
