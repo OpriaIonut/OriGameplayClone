@@ -786,13 +786,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 600
+  midairAcceleration: 10
+  dashSpeed: 1250
+  dashDuration: 0.5
+  dashCooldown: 2
   jumpSpeed: 350
   jumpInputTime: 0.3
-  gravity: 15
-  midairAcceleration: 10
   wallJumpSpeed: 700
   wallJumpDeacc: 500
   dodgeRedirectForce: 10
+  dodgeRedirectSlowDown: 1
+  gravity: 15
+  hoverGravityLimiter: 2.5
   lanternRange: 3
   lanternLayer:
     serializedVersion: 2
@@ -1115,11 +1120,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1727924978403786163, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 53.19
+      value: -6.37
       objectReference: {fileID: 0}
     - target: {fileID: 1727924978403786163, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.6
+      value: -10.15
       objectReference: {fileID: 0}
     - target: {fileID: 1727924978403786163, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: m_LocalPosition.z

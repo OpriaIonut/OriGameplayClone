@@ -4,15 +4,30 @@ using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
 {
+    [Header("Movement")]
     public float moveSpeed = 1.0f;
+    public float midairAcceleration = 10.0f; //In mid-air, if we change direction, we need to accelerate from 0 to a certain speed.
+
+    [Header("Dash")]
+    public float dashSpeed = 1000.0f;
+    public float dashDuration = 1.0f;
+    public float dashCooldown = 3.0f;
+
+    [Header("Jump")]
     public float jumpSpeed = 1.0f;
     public float jumpInputTime = 1.0f; //For the first jump, if we hold they key, we can jump higher. This variable defined how long we can keep pressing
-    public float gravity = 15.0f; //The default gravity didn't achieve proper results, so I defined in fixed update a new gravity
-    public float midairAcceleration = 10.0f; //In mid-air, if we change direction, we need to accelerate from 0 to a certain speed.
+
+    [Header("Wall Jump")]
     public float wallJumpSpeed = 100.0f;
     public float wallJumpDeacc = 1.0f;
+
+    [Header("Dodge redirect")]
     public float dodgeRedirectForce = 100.0f;
     public float dodgeRedirectSlowDown = 1.0f;
+
+    [Header("Gravity")]
+    public float gravity = 15.0f; //The default gravity didn't achieve proper results, so I defined in fixed update a new gravity
+    public float hoverGravityLimiter = 0.3f;
 
     [Header("Lanterns")]
     public float lanternRange;
@@ -24,6 +39,8 @@ public class CharacterMovement : MonoBehaviour
     private bool canJump = true;        //Set to true when lifting jump key & false when actually jumping
     private bool canDoubleJump = true;  //Reset when we hit the ground
     private bool holdingSpace = false;  //Used to create the effect of holding jump key to jump higher
+    private bool holdingShift = false;
+    private bool doDash = false;
 
     private float wallDirection;            //What direction is the climbable wall that we hit in?
     private float jumpTimeCounter = 0.0f;   //Time until we will detect jump hold
@@ -31,6 +48,8 @@ public class CharacterMovement : MonoBehaviour
     private float previousMoveDir = 1.0f;   //Used to detect change of direction in mid-air
     private float accelerationFactor = 1.0f;//Goes from 0 to 1 when we change direction in mid-air
     private float wallJumpPropulsion = 0.0f;//Is used to propell us in an opposite direction to the wall when doing wall jump.
+    private float dashStartTime = -100.0f;
+    private float dashDirection = 0.0f;
     private Vector3 dodgeRedirectVelocity = Vector3.zero;
 
     private Rigidbody rb;
@@ -47,11 +66,25 @@ public class CharacterMovement : MonoBehaviour
         //Detect all input in update
         horizontalInput = Input.GetAxis("Horizontal");
 
+        holdingShift = Input.GetKey(KeyCode.LeftShift);
         holdingSpace = Input.GetKey(KeyCode.Space);
         if (Input.GetKeyUp(KeyCode.Space))
         {
             canJump = true;
             jumpTimeCounter = Time.time;
+        }
+        if(Input.GetKeyDown(KeyCode.LeftControl) && Time.time - dashStartTime > dashCooldown)
+        {
+            doDash = true;
+            dashStartTime = Time.time;
+            dashDirection = horizontalInput;
+            if (dashDirection == 0.0f)
+                dashDirection = transform.forward.x > 0.0f ? 1.0f : -1.0f;
+        }
+        if(doDash && Time.time - dashStartTime > dashDuration)
+        {
+            doDash = false;
+            dashStartTime = Time.time;
         }
 
         bool focusingLantern = false;
@@ -120,8 +153,10 @@ public class CharacterMovement : MonoBehaviour
 
         //Apply horizontal movement
         float xVel = moveSpeed * accelerationFactor * horizontalInput;
-        if (wallDirection != currentMoveDir)
-            xVel += wallJumpPropulsion * wallDirection;
+        xVel += wallJumpPropulsion * wallDirection;
+
+        if (doDash)
+            xVel += dashDirection * dashSpeed;
 
         rb.velocity = new Vector3(xVel * Time.fixedDeltaTime, rb.velocity.y, rb.velocity.z) + dodgeRedirectVelocity * Time.fixedDeltaTime;
 
@@ -173,6 +208,9 @@ public class CharacterMovement : MonoBehaviour
 
         //Custom gravity
         rb.AddForce(Vector3.down * rb.mass * gravity);
+
+        if (!isGrounded && holdingShift)
+            rb.velocity = new Vector3(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -hoverGravityLimiter, 100.0f), 0.0f);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -194,6 +232,14 @@ public class CharacterMovement : MonoBehaviour
         else if(other.tag == "BreakablePlatform")
         {
 
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "ClimbableWall")
+        {
+            canWallJump = false;
         }
     }
 }
