@@ -768,41 +768,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 1532420406}
   speed: 2.5
---- !u!1 &1532420403 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1727924978403786161, guid: be857839962066649b5fb230df4b1326, type: 3}
-  m_PrefabInstance: {fileID: 1727924977117713588}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1532420404
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1532420403}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f747f3459b575da48af66cc6181e382b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 600
-  midairAcceleration: 10
-  dashSpeed: 1250
-  dashDuration: 0.5
-  dashCooldown: 2
-  jumpSpeed: 350
-  jumpInputTime: 0.3
-  wallJumpSpeed: 700
-  wallJumpDeacc: 500
-  dodgeRedirectForce: 10
-  dodgeRedirectSlowDown: 1
-  gravity: 15
-  hoverGravityLimiter: 2.5
-  lanternRange: 3
-  lanternLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  arrowSprite: {fileID: 1674149285}
 --- !u!4 &1532420406 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1727924978403786163, guid: be857839962066649b5fb230df4b1326, type: 3}
@@ -1094,25 +1059,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1727924977155503128, guid: be857839962066649b5fb230df4b1326, type: 3}
-      propertyPath: m_Material
+    - target: {fileID: 1532420404, guid: be857839962066649b5fb230df4b1326, type: 3}
+      propertyPath: arrowSprite
       value: 
-      objectReference: {fileID: 13400000, guid: 02dbe5e4fc86723488ed43d46c7cc6af, type: 2}
+      objectReference: {fileID: 1674149285}
     - target: {fileID: 1727924978403786161, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: m_Name
       value: PlayerObj
-      objectReference: {fileID: 0}
-    - target: {fileID: 1727924978403786162, guid: be857839962066649b5fb230df4b1326, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1727924978403786162, guid: be857839962066649b5fb230df4b1326, type: 3}
-      propertyPath: m_Constraints
-      value: 120
-      objectReference: {fileID: 0}
-    - target: {fileID: 1727924978403786162, guid: be857839962066649b5fb230df4b1326, type: 3}
-      propertyPath: m_IsKinematic
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1727924978403786163, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: m_RootOrder

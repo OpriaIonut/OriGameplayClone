@@ -25,6 +25,12 @@ public class CharacterMovement : MonoBehaviour
     public float dodgeRedirectForce = 100.0f;
     public float dodgeRedirectSlowDown = 1.0f;
 
+    [Header("Bash")]
+    public float bashSpeed = 1000.0f;
+    public float bashChargeTime = 2.0f;
+    public float bashDeacc = 1.0f;
+    public ParticleSystem bashParticles;
+
     [Header("Gravity")]
     public float gravity = 15.0f; //The default gravity didn't achieve proper results, so I defined in fixed update a new gravity
     public float hoverGravityLimiter = 0.3f;
@@ -41,6 +47,10 @@ public class CharacterMovement : MonoBehaviour
     private bool holdingSpace = false;  //Used to create the effect of holding jump key to jump higher
     private bool holdingShift = false;
     private bool doDash = false;
+    private bool canDash = true;
+    private bool bashChargeStarted = false;
+    private float bashPower = 0.0f;
+    private bool playedBashParticles = false;
 
     private float wallDirection;            //What direction is the climbable wall that we hit in?
     private float jumpTimeCounter = 0.0f;   //Time until we will detect jump hold
@@ -51,6 +61,8 @@ public class CharacterMovement : MonoBehaviour
     private float dashStartTime = -100.0f;
     private float dashDirection = 0.0f;
     private Vector3 dodgeRedirectVelocity = Vector3.zero;
+
+    private float bashChargeStartTime = 0.0f;
 
     private Rigidbody rb;
 
@@ -73,9 +85,10 @@ public class CharacterMovement : MonoBehaviour
             canJump = true;
             jumpTimeCounter = Time.time;
         }
-        if(Input.GetKeyDown(KeyCode.LeftControl) && Time.time - dashStartTime > dashCooldown)
+        if(Input.GetKeyDown(KeyCode.LeftControl) && canDash && Time.time - dashStartTime > dashCooldown)
         {
             doDash = true;
+            canDash = false;
             dashStartTime = Time.time;
             dashDirection = horizontalInput;
             if (dashDirection == 0.0f)
@@ -86,6 +99,25 @@ public class CharacterMovement : MonoBehaviour
             doDash = false;
             dashStartTime = Time.time;
         }
+
+        if(isGrounded && Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            bashChargeStarted = true;
+            bashChargeStartTime = Time.time;
+        }
+        if(bashChargeStarted && !playedBashParticles && Time.time - bashChargeStartTime > bashChargeTime)
+        {
+            bashParticles.Play();
+            playedBashParticles = true;
+        }
+        if(bashChargeStarted && Input.GetKeyUp(KeyCode.UpArrow))
+        {
+            bashChargeStarted = false;
+            playedBashParticles = false;
+            if(Time.time - bashChargeStartTime > bashChargeTime)
+                bashPower = bashSpeed;
+        }
+
 
         bool focusingLantern = false;
         if (Input.GetMouseButton(1) && lanternPos != null)
@@ -134,11 +166,13 @@ public class CharacterMovement : MonoBehaviour
 
     private void MovementLogic()
     {
+        Vector3 velocity = rb.velocity;
+
         float currentMoveDir = horizontalInput > 0.0f ? 1.0f : -1.0f;
-        if (rb.velocity.x != 0.0f)
+        if (velocity.x != 0.0f)
         {
             //Rotate player to face move direction
-            float rotAngle = rb.velocity.x > 0.0f ? 90.0f : -90.0f;
+            float rotAngle = velocity.x > 0.0f ? 90.0f : -90.0f;
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, rotAngle, transform.rotation.eulerAngles.z);
         }
 
@@ -158,7 +192,7 @@ public class CharacterMovement : MonoBehaviour
         if (doDash)
             xVel += dashDirection * dashSpeed;
 
-        rb.velocity = new Vector3(xVel * Time.fixedDeltaTime, rb.velocity.y, rb.velocity.z) + dodgeRedirectVelocity * Time.fixedDeltaTime;
+        velocity = new Vector3(xVel * Time.fixedDeltaTime, velocity.y, velocity.z) + dodgeRedirectVelocity * Time.fixedDeltaTime;
 
         dodgeRedirectVelocity = Vector3.Lerp(dodgeRedirectVelocity, Vector3.zero, Time.fixedDeltaTime * dodgeRedirectSlowDown);
 
@@ -193,24 +227,32 @@ public class CharacterMovement : MonoBehaviour
                 else
                     isGrounded = false;
                 canJump = false;
+                bashPower = 0.0f;
 
                 //Propell the character upwards
-                rb.velocity = new Vector3(rb.velocity.x, speed * Time.fixedDeltaTime, rb.velocity.z);
+                velocity.y = speed * Time.fixedDeltaTime;
                 jumpTimeCounter = Time.time + jumpCounterMax;
             }
 
             //While we are holding jump, keep applying force upwards (until the window for holding the jump is over)
             if (jumpTimeCounter - Time.time > 0.0f)
             {
-                rb.velocity = new Vector3(rb.velocity.x, jumpSpeed * Time.fixedDeltaTime, rb.velocity.z);
+                velocity.y = jumpSpeed * Time.fixedDeltaTime;
             }
         }
+
+        velocity.y = velocity.y + bashPower * Time.deltaTime;
+        bashPower = bashPower - bashDeacc * Time.deltaTime;
+        if (bashPower < 0.0f)
+            bashPower = 0.0f;
 
         //Custom gravity
         rb.AddForce(Vector3.down * rb.mass * gravity);
 
         if (!isGrounded && holdingShift)
-            rb.velocity = new Vector3(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -hoverGravityLimiter, 100.0f), 0.0f);
+            velocity.y = Mathf.Clamp(velocity.y, -hoverGravityLimiter, 100.0f);
+
+        rb.velocity = velocity;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -226,6 +268,7 @@ public class CharacterMovement : MonoBehaviour
         {
             isGrounded = true;
             canDoubleJump = true;
+            canDash = true;
             accelerationFactor = 1.0f;
             wallJumpPropulsion = 0.0f;
         }
