@@ -36,6 +36,10 @@ public class CharacterMovement : MonoBehaviour
     public float gravity = 15.0f; //The default gravity didn't achieve proper results, so I defined in fixed update a new gravity
     public float hoverGravityLimiter = 0.3f;
 
+    [Header("Stomp")]
+    public float stompSpeed = 25.0f;
+    public float stompGravityLimiter = 25.0f;
+
     [Header("PropellTargets")]
     public float propellTargetRange;
     public RectTransform arrowSprite;
@@ -51,6 +55,8 @@ public class CharacterMovement : MonoBehaviour
     private bool bashChargeStarted = false;
     private float bashPower = 0.0f;
     private bool playedBashParticles = false;
+
+    private bool doStomp = false;
 
     private float wallDirection;            //What direction is the climbable wall that we hit in?
     private float jumpTimeCounter = 0.0f;   //Time until we will detect jump hold
@@ -118,6 +124,11 @@ public class CharacterMovement : MonoBehaviour
             playedBashParticles = false;
             if(isGrounded && Time.time - bashChargeStartTime > bashChargeTime)
                 bashPower = bashSpeed;
+        }
+
+        if(!isGrounded && Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            doStomp = true;
         }
 
 
@@ -239,6 +250,7 @@ public class CharacterMovement : MonoBehaviour
                     isGrounded = false;
                 canJump = false;
                 bashPower = 0.0f;
+                doStomp = false;
 
                 //Propell the character upwards
                 velocity.y = speed * Time.fixedDeltaTime;
@@ -257,13 +269,16 @@ public class CharacterMovement : MonoBehaviour
         if (bashPower < 0.0f)
             bashPower = 0.0f;
 
-        //Custom gravity
-        rb.AddForce(Vector3.down * rb.mass * gravity);
-
-        if (!isGrounded && holdingShift)
-            velocity.y = Mathf.Clamp(velocity.y, -hoverGravityLimiter, 100.0f);
-
         rb.velocity = velocity;
+
+        //Custom gravity
+        float appliedStomp = doStomp ? stompSpeed : 1.0f;
+        rb.AddForce(Vector3.down * rb.mass * gravity * appliedStomp);
+
+        if(doStomp)
+            rb.velocity = new Vector3(rb.velocity.x, Mathf.Clamp(velocity.y, -stompGravityLimiter, float.MaxValue), 0.0f);
+        else if (!isGrounded && holdingShift)
+            rb.velocity = new Vector3(rb.velocity.x, Mathf.Clamp(velocity.y, -hoverGravityLimiter, float.MaxValue), 0.0f);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -278,12 +293,18 @@ public class CharacterMovement : MonoBehaviour
         }
         else if(other.tag == "GroundPlatform" || other.tag == "BreakablePlatform")
         {
+            if (doStomp && other.tag == "BreakablePlatform")
+            {
+                other.transform.parent.gameObject.SetActive(false);
+            }
+
             isGrounded = true;
             canDoubleJump = true;
             canDash = true;
             dodgeRedirectAmount = 0.0f;
             accelerationFactor = 1.0f;
             wallJumpPropulsion = 0.0f;
+            doStomp = false;
         }
     }
 

@@ -324,6 +324,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BaseMap
       objectReference: {fileID: 0}
+    - target: {fileID: 5481311795819298818, guid: fc8bbb378e386f245a201daee15f874d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc8bbb378e386f245a201daee15f874d, type: 3}
 --- !u!4 &382386758 stripped
@@ -1060,9 +1064,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1532420404, guid: be857839962066649b5fb230df4b1326, type: 3}
+      propertyPath: stompSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1532420404, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: arrowSprite
       value: 
       objectReference: {fileID: 1674149285}
+    - target: {fileID: 1532420404, guid: be857839962066649b5fb230df4b1326, type: 3}
+      propertyPath: stompGravityLimiter
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 1727924978403786161, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: m_Name
       value: PlayerObj
