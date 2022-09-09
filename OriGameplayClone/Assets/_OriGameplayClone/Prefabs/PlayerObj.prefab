@@ -5142,16 +5142,14 @@ MonoBehaviour:
   jumpInputTime: 0.3
   wallJumpSpeed: 700
   wallJumpDeacc: 500
-  dodgeRedirectForce: 10
-  dodgeRedirectSlowDown: 1
+  dodgeRedirectForce: 1000
+  dodgeRedirectDeacc: 500
+  dodgeRedirectHeightReduction: 1
   bashSpeed: 225
-  bashChargeTime: 2
+  bashChargeTime: 1
   bashDeacc: 1000
   bashParticles: {fileID: 593851314}
   gravity: 15
-  hoverGravityLimiter: 2.5
-  lanternRange: 3
-  lanternLayer:
-    serializedVersion: 2
-    m_Bits: 64
+  hoverGravityLimiter: 3
+  propellTargetRange: 5
   arrowSprite: {fileID: 0}

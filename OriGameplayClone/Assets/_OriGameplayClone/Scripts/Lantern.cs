@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lantern : MonoBehaviour
+public class Lantern : PropellTarget
 {
     private Material lanternMat;
     private Color initColor;
@@ -23,25 +23,17 @@ public class Lantern : MonoBehaviour
         rope.SetPosition(1, transform.position);
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected override void OnPlayerEnteredRange()
     {
-        if(other.transform.root.tag == "Player")
-        {
-            CharacterMovement playerMovement = other.transform.root.GetComponent<CharacterMovement>();
-            playerMovement.EnteredLanternRange(transform);
-            lanternMat.color = Color.cyan;
-            lanternMat.SetColor("_EmissionColor", Color.cyan);
-        }
+        base.OnPlayerEnteredRange();
+        lanternMat.color = Color.cyan;
+        lanternMat.SetColor("_EmissionColor", Color.cyan);
     }
 
-    private void OnTriggerExit(Collider other)
+    protected override void OnPlayerExitedRange()
     {
-        if(other.transform.root.tag == "Player")
-        {
-            CharacterMovement playerMovement = other.transform.root.GetComponent<CharacterMovement>();
-            playerMovement.ExitLanternRange();
-            lanternMat.color = initColor;
-            lanternMat.SetColor("_EmissionColor", initEmissionColor);
-        }
+        base.OnPlayerExitedRange();
+        lanternMat.color = initColor;
+        lanternMat.SetColor("_EmissionColor", initEmissionColor);
     }
 }

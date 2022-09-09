@@ -23,7 +23,8 @@ public class CharacterMovement : MonoBehaviour
 
     [Header("Dodge redirect")]
     public float dodgeRedirectForce = 100.0f;
-    public float dodgeRedirectSlowDown = 1.0f;
+    public float dodgeRedirectDeacc = 1.0f;
+    public float dodgeRedirectHeightReduction = 0.1f;
 
     [Header("Bash")]
     public float bashSpeed = 1000.0f;
@@ -35,9 +36,8 @@ public class CharacterMovement : MonoBehaviour
     public float gravity = 15.0f; //The default gravity didn't achieve proper results, so I defined in fixed update a new gravity
     public float hoverGravityLimiter = 0.3f;
 
-    [Header("Lanterns")]
-    public float lanternRange;
-    public LayerMask lanternLayer;
+    [Header("PropellTargets")]
+    public float propellTargetRange;
     public RectTransform arrowSprite;
 
     private bool isGrounded = true;     //Did we hit a ground collider?
@@ -60,13 +60,15 @@ public class CharacterMovement : MonoBehaviour
     private float wallJumpPropulsion = 0.0f;//Is used to propell us in an opposite direction to the wall when doing wall jump.
     private float dashStartTime = -100.0f;
     private float dashDirection = 0.0f;
-    private Vector3 dodgeRedirectVelocity = Vector3.zero;
+    private Vector3 dodgeRedirectDirection = Vector3.zero;
+    private float dodgeRedirectAmount = 0.0f;
 
     private float bashChargeStartTime = 0.0f;
 
     private Rigidbody rb;
 
-    private Transform lanternPos;
+    private PropellTarget propellTarget;
+    private Transform propellTargetPos;
 
     private void Start()
     {
@@ -100,12 +102,12 @@ public class CharacterMovement : MonoBehaviour
             dashStartTime = Time.time;
         }
 
-        if(isGrounded && Input.GetKeyDown(KeyCode.UpArrow))
+        if(Input.GetKeyDown(KeyCode.UpArrow))
         {
             bashChargeStarted = true;
             bashChargeStartTime = Time.time;
         }
-        if(bashChargeStarted && !playedBashParticles && Time.time - bashChargeStartTime > bashChargeTime)
+        if(bashChargeStarted && isGrounded && !playedBashParticles && Time.time - bashChargeStartTime > bashChargeTime)
         {
             bashParticles.Play();
             playedBashParticles = true;
@@ -114,35 +116,39 @@ public class CharacterMovement : MonoBehaviour
         {
             bashChargeStarted = false;
             playedBashParticles = false;
-            if(Time.time - bashChargeStartTime > bashChargeTime)
+            if(isGrounded && Time.time - bashChargeStartTime > bashChargeTime)
                 bashPower = bashSpeed;
         }
 
 
-        bool focusingLantern = false;
-        if (Input.GetMouseButton(1) && lanternPos != null)
+        bool focusingPropellTarget = false;
+        if (Input.GetMouseButton(1) && propellTargetPos != null)
         {
-            focusingLantern = true;
-            Time.timeScale = 0.4f;
+            focusingPropellTarget = true;
+            Time.timeScale = 0.3f;
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-            Vector3 direction = mouseWorldPos - lanternPos.position;
+            Vector3 direction = mouseWorldPos - propellTargetPos.position;
 
-            //Debug.DrawLine(lanternPos.position, mouseWorldPos, Color.red);
             arrowSprite.gameObject.SetActive(true);
 
-            arrowSprite.position = Camera.main.WorldToScreenPoint(lanternPos.position);
+            arrowSprite.position = Camera.main.WorldToScreenPoint(propellTargetPos.position);
             arrowSprite.rotation = Quaternion.LookRotation(Vector3.forward, direction.normalized);
         }
-        if (Input.GetMouseButtonUp(1) && lanternPos != null)
+        if (Input.GetMouseButtonUp(1) && propellTargetPos != null)
         {
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-            Vector3 direction = mouseWorldPos - lanternPos.position;
+            Vector3 direction = mouseWorldPos - propellTargetPos.position;
 
-            dodgeRedirectVelocity = direction.normalized * dodgeRedirectForce;
-            rb.velocity = direction.normalized * dodgeRedirectForce;
+            rb.velocity = new Vector3(rb.velocity.x, 0.0f, 0.0f);
+            canDoubleJump = true;
+            propellTarget.LaunchTarget(-direction);
+
+            dodgeRedirectDirection = direction.normalized;
+            dodgeRedirectDirection.y *= dodgeRedirectHeightReduction;
+            dodgeRedirectAmount = dodgeRedirectForce;
             arrowSprite.gameObject.SetActive(false);
         }
-        if (!focusingLantern)
+        if (!focusingPropellTarget)
         {
             Time.timeScale = 1.0f;
             arrowSprite.gameObject.SetActive(false);
@@ -154,14 +160,16 @@ public class CharacterMovement : MonoBehaviour
         MovementLogic();
     }
 
-    public void EnteredLanternRange(Transform lanternPosition)
+    public void EnteredPropellTargetRange(PropellTarget _propellTarget)
     {
-        lanternPos = lanternPosition;
+        propellTarget = _propellTarget;
+        propellTargetPos = propellTarget.transform;
     }
 
-    public void ExitLanternRange()
+    public void ExitPropellTargetRange()
     {
-        lanternPos = null;
+        propellTargetPos = null;
+        propellTarget = null;
     }
 
     private void MovementLogic()
@@ -192,9 +200,12 @@ public class CharacterMovement : MonoBehaviour
         if (doDash)
             xVel += dashDirection * dashSpeed;
 
-        velocity = new Vector3(xVel * Time.fixedDeltaTime, velocity.y, velocity.z) + dodgeRedirectVelocity * Time.fixedDeltaTime;
+        velocity = new Vector3(xVel * Time.fixedDeltaTime, velocity.y, velocity.z) + dodgeRedirectDirection * dodgeRedirectAmount * Time.fixedDeltaTime;
 
-        dodgeRedirectVelocity = Vector3.Lerp(dodgeRedirectVelocity, Vector3.zero, Time.fixedDeltaTime * dodgeRedirectSlowDown);
+        dodgeRedirectAmount -= dodgeRedirectDeacc * Time.fixedDeltaTime;
+        if (dodgeRedirectAmount < 0.0f)
+            dodgeRedirectAmount = 0.0f;
+        dodgeRedirectDirection.y = Mathf.Lerp(dodgeRedirectDirection.y, 0.0f, dodgeRedirectDeacc * Time.fixedDeltaTime);
 
         wallJumpPropulsion = Mathf.Clamp(wallJumpPropulsion - wallJumpDeacc * Time.fixedDeltaTime, 0.0f, wallJumpSpeed);
 
@@ -241,8 +252,8 @@ public class CharacterMovement : MonoBehaviour
             }
         }
 
-        velocity.y = velocity.y + bashPower * Time.deltaTime;
-        bashPower = bashPower - bashDeacc * Time.deltaTime;
+        velocity.y += bashPower * Time.deltaTime;
+        bashPower -= bashDeacc * Time.deltaTime;
         if (bashPower < 0.0f)
             bashPower = 0.0f;
 
@@ -261,20 +272,18 @@ public class CharacterMovement : MonoBehaviour
         {
             canWallJump = true;
             canDoubleJump = true;
+            dodgeRedirectAmount = 0.0f;
             wallDirection = other.transform.position.x - transform.position.x;
             wallDirection /= Mathf.Abs(wallDirection); //Convert it to -1 or 1
         }
-        else if(other.tag == "GroundPlatform")
+        else if(other.tag == "GroundPlatform" || other.tag == "BreakablePlatform")
         {
             isGrounded = true;
             canDoubleJump = true;
             canDash = true;
+            dodgeRedirectAmount = 0.0f;
             accelerationFactor = 1.0f;
             wallJumpPropulsion = 0.0f;
-        }
-        else if(other.tag == "BreakablePlatform")
-        {
-
         }
     }
 
@@ -283,6 +292,10 @@ public class CharacterMovement : MonoBehaviour
         if (other.tag == "ClimbableWall")
         {
             canWallJump = false;
+        }
+        if(other.tag == "GroundPlatform" || other.tag == "BreakablePlatform")
+        {
+            isGrounded = false;
         }
     }
 }
