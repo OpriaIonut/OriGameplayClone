@@ -7,6 +7,7 @@ TagManager:
   - ClimbableWall
   - GroundPlatform
   - BreakablePlatform
+  - PlayerCollider
   layers:
   - Default
   - TransparentFX

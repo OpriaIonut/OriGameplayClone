@@ -2,43 +2,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-public abstract class PropellTarget: MonoBehaviour
+namespace OriProject
 {
-    public float propellForce = 100.0f;
-
-    public virtual void LaunchTarget(Vector3 direction)
+    [RequireComponent(typeof(Rigidbody))]
+    public abstract class PropellTarget : MonoBehaviour
     {
-        GetComponent<Rigidbody>().AddForce(direction * propellForce);
-    }
+        public float propellForce = 100.0f;
 
-    protected virtual void OnPlayerEnteredRange()
-    {
-
-    }
-
-    protected virtual void OnPlayerExitedRange()
-    {
-
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.transform.root.tag == "Player")
+        public virtual void LaunchTarget(Vector3 direction)
         {
-            CharacterMovement playerMovement = other.transform.root.GetComponent<CharacterMovement>();
-            playerMovement.EnteredPropellTargetRange(this);
-            OnPlayerEnteredRange();
+            GetComponent<Rigidbody>().AddForce(direction * propellForce);
         }
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.transform.root.tag == "Player")
+        protected virtual void OnPlayerEnteredRange()
         {
-            CharacterMovement playerMovement = other.transform.root.GetComponent<CharacterMovement>();
-            playerMovement.ExitPropellTargetRange();
-            OnPlayerExitedRange();
+
+        }
+
+        protected virtual void OnPlayerExitedRange()
+        {
+
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.tag == "PlayerCollider")
+            {
+                CharacterMovement playerMovement = other.transform.root.GetComponent<CharacterMovement>();
+                playerMovement.EnteredPropellTargetRange(this);
+                OnPlayerEnteredRange();
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.tag == "PlayerCollider")
+            {
+                CharacterMovement playerMovement = other.transform.root.GetComponent<CharacterMovement>();
+                playerMovement.ExitPropellTargetRange();
+                OnPlayerExitedRange();
+            }
         }
     }
 }

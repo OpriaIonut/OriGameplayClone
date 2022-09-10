@@ -2,38 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lantern : PropellTarget
+namespace OriProject
 {
-    private Material lanternMat;
-    private Color initColor;
-    private Color initEmissionColor;
-    private LineRenderer rope;
-
-    private void Start()
+    public class Lantern : PropellTarget
     {
-        rope = transform.parent.GetComponent<LineRenderer>();
-        lanternMat = GetComponent<MeshRenderer>().material;
-        initColor = lanternMat.color;
-        initEmissionColor = lanternMat.GetColor("_EmissionColor");
-    }
+        private Material lanternMat;
+        private Color initColor;
+        private Color initEmissionColor;
+        private LineRenderer rope;
 
-    private void Update()
-    {
-        rope.SetPosition(0, transform.parent.position);
-        rope.SetPosition(1, transform.position);
-    }
+        private void Start()
+        {
+            rope = transform.parent.GetComponent<LineRenderer>();
+            lanternMat = GetComponent<MeshRenderer>().material;
+            initColor = lanternMat.color;
+            initEmissionColor = lanternMat.GetColor("_EmissionColor");
+        }
 
-    protected override void OnPlayerEnteredRange()
-    {
-        base.OnPlayerEnteredRange();
-        lanternMat.color = Color.cyan;
-        lanternMat.SetColor("_EmissionColor", Color.cyan);
-    }
+        private void Update()
+        {
+            rope.SetPosition(0, transform.parent.position);
+            rope.SetPosition(1, transform.position);
+        }
 
-    protected override void OnPlayerExitedRange()
-    {
-        base.OnPlayerExitedRange();
-        lanternMat.color = initColor;
-        lanternMat.SetColor("_EmissionColor", initEmissionColor);
+        protected override void OnPlayerEnteredRange()
+        {
+            base.OnPlayerEnteredRange();
+            lanternMat.color = Color.cyan;
+            lanternMat.SetColor("_EmissionColor", Color.cyan);
+        }
+
+        protected override void OnPlayerExitedRange()
+        {
+            base.OnPlayerExitedRange();
+            lanternMat.color = initColor;
+            lanternMat.SetColor("_EmissionColor", initEmissionColor);
+        }
     }
 }
