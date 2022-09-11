@@ -17,13 +17,24 @@ namespace OriProject
         private float damage;
         private float currentInterpolation = 0.0f;
 
+        private PlayerLogic playerScript;
+        private EnemyBase enemyScript;
+
         private void Update()
         {
             MoveBullet();
+
+            if(enemyScript == null && currentInterpolation >= 1.0f)
+            {
+                DestroyImmediate(gameObject);
+            }
         }
 
-        public void Init(Vector3 _startPoint, Vector3 _endPoint, float _damage)
+        public void Init(PlayerLogic _playerScript, EnemyBase enemy, Vector3 _startPoint, Vector3 _endPoint, float _damage)
         {
+            playerScript = _playerScript;
+            enemyScript = enemy;
+
             startPoint = _startPoint;
             endPoint = _endPoint;
             calculatedMiddle = (startPoint + endPoint) / 2.0f;
@@ -34,36 +45,14 @@ namespace OriProject
                 yDiff = 0.5f;
 
             calculatedMiddle.y += yDiff * middleHeightFactor;
-
-            GameObject clone1 = Instantiate(debugSphere);
-            clone1.transform.position = startPoint;
-            clone1.name = "P0";
-
-            GameObject clone2 = Instantiate(debugSphere);
-            clone2.transform.position = calculatedMiddle;
-            clone2.name = "P1";
-
-            GameObject clone3 = Instantiate(debugSphere);
-            clone3.transform.position = endPoint;
-            clone3.name = "P2";
         }
 
         private void MoveBullet()
         {
-            //(1 - t) ^ 2) * p0 + 2 * (1 - t) * t * p1 + t * 2 * p2
-            //Vector3 calculatedPos = Mathf.Pow((1.0f - currentInterpolation), 2.0f) * startPoint + 2.0f * (1.0f - currentInterpolation) * calculatedMiddle + Mathf.Pow(currentInterpolation, 2.0f) * endPoint;
+            Vector3 calculatedPos = Vector3.Lerp(startPoint, endPoint, currentInterpolation);
+            float yFact = -4.0f * middleHeightFactor * currentInterpolation * currentInterpolation + 4.0f * middleHeightFactor * currentInterpolation;
+            calculatedPos.y = yFact + Mathf.Lerp(startPoint.y, endPoint.y, currentInterpolation);
 
-            float u = 1.0f - currentInterpolation;
-            float tt = currentInterpolation * currentInterpolation;
-            float uu = u * u;
-            Vector3 p = uu * startPoint;
-            p += 2 * u * tt * calculatedMiddle;
-            p += tt * endPoint;
-
-            Vector3 calculatedPos = p;
-
-
-            //Vector3 calculatedPos = Vector3.Lerp(startPoint, endPoint, currentInterpolation);
             transform.position = calculatedPos;
 
             float interpolationFact = 1.0f / interpolationTime;
@@ -75,7 +64,13 @@ namespace OriProject
             EnemyBase script = other.transform.root.GetComponent<EnemyBase>();
             if(script)
             {
-                script.TakeDamage(damage);
+                bool enemyDied = script.TakeDamage(damage);
+
+                if(enemyDied)
+                {
+                    playerScript.EnemyDied(enemyScript);
+                }
+
                 Destroy(this.gameObject);
             }
         }

@@ -141,7 +141,7 @@ TrailRenderer:
   m_Time: 0.15
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.25
+    widthMultiplier: 0.15
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -217,5 +217,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interpolationTime: 0.5
-  middleHeightFactor: 1
+  middleHeightFactor: 2
   debugSphere: {fileID: 5495239138922534652, guid: f40f8b41cff68d84194da0de49d5f3f4, type: 3}

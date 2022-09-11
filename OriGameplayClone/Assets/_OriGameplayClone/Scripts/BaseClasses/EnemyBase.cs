@@ -23,11 +23,15 @@ namespace OriProject
             inPlayerRangeGfx.SetActive(value);
         }
 
-        public void TakeDamage(float damageAmount)
+        public bool TakeDamage(float damageAmount)
         {
             currentHealth -= damageAmount;
             if (currentHealth <= 0.0f)
+            {
                 Die();
+                return true;
+            }
+            return false;
         }
 
         private void Die()

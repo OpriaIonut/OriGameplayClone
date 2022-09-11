@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d388215a7fa62a40a2f3e93a2768ecc, type: 3}
   m_Name: EnemyTest
   m_EditorClassIdentifier: 
-  health: 1000
+  health: 100
   damage: 5

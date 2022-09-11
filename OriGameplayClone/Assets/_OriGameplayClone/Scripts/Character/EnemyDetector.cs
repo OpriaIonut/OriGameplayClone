@@ -6,11 +6,13 @@ namespace OriProject
 {
     public class EnemyDetector : MonoBehaviour
     {
+        public float radius = 10.0f;
         private PlayerLogic playerScript;
 
         private void Start()
         {
             playerScript = transform.root.GetComponent<PlayerLogic>();
+            GetComponent<SphereCollider>().radius = radius;
         }
 
         private void OnTriggerEnter(Collider other)
