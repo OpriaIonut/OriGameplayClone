@@ -8,20 +8,31 @@ namespace OriProject
     public class PlayerLogic : MonoBehaviour
     {
         public float maxHealth;
-        public float damage;
 
         [Header("Attack")]
+        public float damage;
+        public float radius;
         public int shotsBeforeDelay = 5;
         public float attackRechargeDelay = 1.0f;
         public int maxNumOfEnemies = 3;
         public GameObject bulletPrefab;
         public Transform bulletSpawnPoint;
 
+        [Header("ChargeAttack")]
+        public float chargeAttackDamage;
+        public float chargeTime = 1.0f;
+        public ParticleSystem chargeReadyParticles;
+        public ParticleSystem chargeAttackParticles;
+
         private float currentHealth;
         private int currentShots = 0;
         private float attackRechargeTime = 0.0f;
 
         private EnemyDetector enemyDetector;
+
+        private float chargeStartTime = 0.0f;
+        private bool isCharging = false;
+        private bool chargeReady = false;
 
         private List<EnemyBase> enemiesInRange = new List<EnemyBase>();
         private List<Tuple<int, float>> enemyDistance = new List<Tuple<int, float>>();
@@ -30,6 +41,7 @@ namespace OriProject
         {
             currentHealth = maxHealth;
             enemyDetector = GetComponentInChildren<EnemyDetector>();
+            enemyDetector.SetRadius(radius);
         }
 
         private void Update()
@@ -48,6 +60,9 @@ namespace OriProject
             }
             else if (Input.GetMouseButtonDown(0))
             {
+                isCharging = true;
+                chargeStartTime = Time.time;
+
                 List<EnemyBase> targetedEnemies = new List<EnemyBase>(enemiesInRange);
                 if (enemiesInRange.Count > maxNumOfEnemies)
                 {
@@ -76,7 +91,7 @@ namespace OriProject
                     {
                         float randAngle = UnityEngine.Random.Range(0.0f, 2 * (float)Math.PI);
                         Vector3 pos = new Vector3(Mathf.Cos(randAngle), Mathf.Sin(randAngle), 0.0f);
-                        pos = transform.position + pos * enemyDetector.radius * 0.5f;
+                        pos = transform.position + pos * radius * 0.5f;
 
                         GameObject clone = Instantiate(bulletPrefab);
                         clone.transform.position = bulletSpawnPoint.position;
@@ -104,6 +119,24 @@ namespace OriProject
                 {
                     attackRechargeTime = Time.time;
                 }
+            }
+            if(Input.GetMouseButtonUp(0))
+            {
+                if(chargeReady)
+                {
+                    chargeAttackParticles.Play();
+                    for(int index = 0; index < enemiesInRange.Count; index++)
+                    {
+                        enemiesInRange[index].TakeDamage(chargeAttackDamage);
+                    }
+                }
+                isCharging = false;
+                chargeReady = false;
+            }
+            if(isCharging && !chargeReady && Time.time - chargeStartTime > chargeTime)
+            {
+                chargeReady = true;
+                chargeReadyParticles.Play();
             }
         }
 
