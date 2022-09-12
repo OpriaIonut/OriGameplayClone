@@ -2,12 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace OriProject
 {
     public class PlayerLogic : MonoBehaviour
     {
         public float maxHealth;
+        public Image healthBar; 
 
         [Header("Attack")]
         public float damage;
@@ -140,11 +142,16 @@ namespace OriProject
             }
         }
 
-        public void TakeDamage(float health)
+        public void TakeDamage(float damage)
         {
-            currentHealth -= maxHealth;
+            currentHealth -= damage;
             if (currentHealth <= 0.0f)
                 Die();
+            else
+            {
+                float healthBarFill = currentHealth / maxHealth;
+                healthBar.transform.localScale = new Vector3(healthBarFill, healthBar.transform.localScale.y, healthBar.transform.localScale.z);
+            }
         }
 
         private void Die()

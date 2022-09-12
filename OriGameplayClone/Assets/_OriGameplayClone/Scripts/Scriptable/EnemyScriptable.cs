@@ -9,5 +9,7 @@ namespace OriProject
     {
         public float health;
         public float damage;
+        public float range;
+        public float attackCooldown;
     }
 }

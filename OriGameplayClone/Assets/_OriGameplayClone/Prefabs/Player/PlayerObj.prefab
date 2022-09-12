@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 593851311}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.85, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1727924978403786163}
@@ -4920,7 +4920,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 625ac78ee916bac40a655423570fdfd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 10
 --- !u!54 &840027481
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5244,10 +5243,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8775b002430635748b67c8400a206a91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 200
+  maxHealth: 100
+  healthBar: {fileID: 0}
   damage: 10
+  radius: 10
   shotsBeforeDelay: 5
   attackRechargeDelay: 1
   maxNumOfEnemies: 3
   bulletPrefab: {fileID: 1251851857864130531, guid: 52a388632b370e841a05223fe7d19058, type: 3}
   bulletSpawnPoint: {fileID: 0}
+  chargeAttackDamage: 50
+  chargeTime: 1
+  chargeReadyParticles: {fileID: 0}
+  chargeAttackParticles: {fileID: 0}

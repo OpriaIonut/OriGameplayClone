@@ -110,7 +110,7 @@ namespace OriProject
                 dashStartTime = Time.time;
             }
 
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (Input.GetKeyDown(KeyCode.W))
             {
                 bashChargeStarted = true;
                 bashChargeStartTime = Time.time;
@@ -120,7 +120,7 @@ namespace OriProject
                 bashParticles.Play();
                 playedBashParticles = true;
             }
-            if (bashChargeStarted && Input.GetKeyUp(KeyCode.UpArrow))
+            if (bashChargeStarted && Input.GetKeyUp(KeyCode.W))
             {
                 bashChargeStarted = false;
                 playedBashParticles = false;
@@ -128,7 +128,7 @@ namespace OriProject
                     bashPower = bashSpeed;
             }
 
-            if (!isGrounded && Input.GetKeyDown(KeyCode.DownArrow))
+            if (!isGrounded && Input.GetKeyDown(KeyCode.S))
             {
                 doStomp = true;
             }
@@ -171,8 +171,6 @@ namespace OriProject
         private void FixedUpdate()
         {
             MovementLogic();
-            //transform.root.position = transform.position;
-            //transform.root.rotation = transform.rotation;
         }
 
         public void EnteredPropellTargetRange(PropellTarget _propellTarget)
