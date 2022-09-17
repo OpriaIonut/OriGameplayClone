@@ -7,7 +7,9 @@ TagManager:
   - ClimbableWall
   - GroundPlatform
   - BreakablePlatform
-  - PlayerCollider
+  - PlayerHitbox
+  - EnemyHitbox
+  - PropellTarget
   layers:
   - Default
   - TransparentFX
@@ -15,8 +17,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - PlayerCollision
+  - EnemyCollision
   - 
   - 
   - 

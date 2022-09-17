@@ -43,8 +43,9 @@ namespace OriProject
         public float stompGravityLimiter = 25.0f;
 
         [Header("PropellTargets")]
-        public float propellTargetRange;
         public RectTransform arrowSprite;
+
+        private List<PropellTarget> propellTargets = new List<PropellTarget>();
 
         private bool isGrounded = true;     //Did we hit a ground collider?
         private bool canWallJump = false;  //Did we hit a climbable wall collider?
@@ -74,9 +75,6 @@ namespace OriProject
         private float bashChargeStartTime = 0.0f;
 
         private Rigidbody rb;
-
-        private PropellTarget propellTarget;
-        private Transform propellTargetPos;
 
         private void Start()
         {
@@ -135,31 +133,35 @@ namespace OriProject
 
 
             bool focusingPropellTarget = false;
-            if (Input.GetMouseButton(1) && propellTargetPos != null)
+            if (propellTargets.Count > 0 && (Input.GetMouseButton(1) || Input.GetMouseButtonUp(1)))
             {
-                focusingPropellTarget = true;
-                Time.timeScale = 0.3f;
-                Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-                Vector3 direction = mouseWorldPos - propellTargetPos.position;
+                PropellTarget propellTarget = FindNearestPropellTarget();
+                if (Input.GetMouseButton(1) && propellTarget != null)
+                {
+                    focusingPropellTarget = true;
+                    Time.timeScale = 0.3f;
+                    Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+                    Vector3 direction = mouseWorldPos - propellTarget.transform.position;
 
-                arrowSprite.gameObject.SetActive(true);
+                    arrowSprite.gameObject.SetActive(true);
 
-                arrowSprite.position = Camera.main.WorldToScreenPoint(propellTargetPos.position);
-                arrowSprite.rotation = Quaternion.LookRotation(Vector3.forward, direction.normalized);
-            }
-            if (Input.GetMouseButtonUp(1) && propellTargetPos != null)
-            {
-                Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-                Vector3 direction = mouseWorldPos - propellTargetPos.position;
+                    arrowSprite.position = Camera.main.WorldToScreenPoint(propellTarget.transform.position);
+                    arrowSprite.rotation = Quaternion.LookRotation(Vector3.forward, direction.normalized);
+                }
+                if (Input.GetMouseButtonUp(1) && propellTarget != null)
+                {
+                    Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+                    Vector3 direction = mouseWorldPos - propellTarget.transform.position;
 
-                rb.velocity = new Vector3(rb.velocity.x, 0.0f, 0.0f);
-                canDoubleJump = true;
-                propellTarget.LaunchTarget(-direction);
+                    rb.velocity = new Vector3(rb.velocity.x, 0.0f, 0.0f);
+                    canDoubleJump = true;
+                    propellTarget.LaunchTarget(-direction);
 
-                dodgeRedirectDirection = direction.normalized;
-                dodgeRedirectDirection.y *= dodgeRedirectHeightReduction;
-                dodgeRedirectAmount = dodgeRedirectForce;
-                arrowSprite.gameObject.SetActive(false);
+                    dodgeRedirectDirection = direction.normalized;
+                    dodgeRedirectDirection.y *= dodgeRedirectHeightReduction;
+                    dodgeRedirectAmount = dodgeRedirectForce;
+                    arrowSprite.gameObject.SetActive(false);
+                }
             }
             if (!focusingPropellTarget)
             {
@@ -175,14 +177,34 @@ namespace OriProject
 
         public void EnteredPropellTargetRange(PropellTarget _propellTarget)
         {
-            propellTarget = _propellTarget;
-            propellTargetPos = propellTarget.transform;
+            propellTargets.Add(_propellTarget);
         }
 
-        public void ExitPropellTargetRange()
+        public void ExitPropellTargetRange(PropellTarget _propellTarget)
         {
-            propellTargetPos = null;
-            propellTarget = null;
+            propellTargets.Remove(_propellTarget);
+        }
+
+        private PropellTarget FindNearestPropellTarget()
+        {
+            PropellTarget foundTarget = null;
+            float minDist = float.MaxValue;
+            for(int index = 0; index < propellTargets.Count; index++)
+            {
+                if(propellTargets[index] == null)
+                {
+                    propellTargets.RemoveAt(index);
+                    index--;
+                    continue;
+                }
+                float currentDist = Vector3.Distance(transform.position, propellTargets[index].transform.position);
+                if(currentDist < minDist)
+                {
+                    minDist = currentDist;
+                    foundTarget = propellTargets[index];
+                }
+            }
+            return foundTarget;
         }
 
         private void MovementLogic()
@@ -316,7 +338,7 @@ namespace OriProject
             {
                 canWallJump = false;
             }
-            if (other.tag == "GroundPlatform" || other.tag == "BreakablePlatform")
+            else if (other.tag == "GroundPlatform" || other.tag == "BreakablePlatform")
             {
                 isGrounded = false;
             }

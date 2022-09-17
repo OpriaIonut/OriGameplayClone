@@ -25,14 +25,14 @@ namespace OriProject
             rope.SetPosition(1, transform.position);
         }
 
-        protected override void OnPlayerEnteredRange()
+        public override void OnPlayerEnteredRange()
         {
             base.OnPlayerEnteredRange();
             lanternMat.color = Color.cyan;
             lanternMat.SetColor("_EmissionColor", Color.cyan);
         }
 
-        protected override void OnPlayerExitedRange()
+        public override void OnPlayerExitedRange()
         {
             base.OnPlayerExitedRange();
             lanternMat.color = initColor;

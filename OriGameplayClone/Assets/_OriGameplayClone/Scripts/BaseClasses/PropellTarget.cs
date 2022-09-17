@@ -14,34 +14,14 @@ namespace OriProject
             GetComponent<Rigidbody>().AddForce(direction * propellForce);
         }
 
-        protected virtual void OnPlayerEnteredRange()
+        public virtual void OnPlayerEnteredRange()
         {
 
         }
 
-        protected virtual void OnPlayerExitedRange()
+        public virtual void OnPlayerExitedRange()
         {
 
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.tag == "PlayerCollider")
-            {
-                CharacterMovement playerMovement = other.transform.root.GetComponent<CharacterMovement>();
-                playerMovement.EnteredPropellTargetRange(this);
-                OnPlayerEnteredRange();
-            }
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.tag == "PlayerCollider")
-            {
-                CharacterMovement playerMovement = other.transform.root.GetComponent<CharacterMovement>();
-                playerMovement.ExitPropellTargetRange();
-                OnPlayerExitedRange();
-            }
         }
     }
 }

@@ -5,14 +5,16 @@ using UnityEngine.UI;
 
 namespace OriProject
 {
-    public class EnemyBase : MonoBehaviour
+    public class EnemyBase : PropellTarget
     {
         public EnemyScriptable status;
         public GameObject inPlayerRangeGfx;
         public Image healthBar;
 
         protected Transform playerTransf;
+        protected Rigidbody rb;
         protected bool isPlayerInRange = false;
+        protected bool damagedPlayer = false;
 
         private float currentHealth;
         private float lastAttackTime = 0.0f;
@@ -23,6 +25,8 @@ namespace OriProject
 
             healthBar.transform.parent.gameObject.SetActive(false);
             playerTransf = FindObjectOfType<PlayerLogic>().transform;
+
+            rb = GetComponent<Rigidbody>();
 
             StartCoroutine("FindPlayerRange");
         }
@@ -79,7 +83,7 @@ namespace OriProject
 
         protected virtual void Attack()
         {
-            //Intentionally left empty
+            damagedPlayer = false;
         }
 
         private IEnumerator FindPlayerRange()
@@ -95,11 +99,11 @@ namespace OriProject
             }
         }
 
-        private void OnCollisionEnter(Collision collision)
+        protected virtual void OnTriggerEnterBase(Collider other)
         {
-            if (collision.gameObject.tag == "Player")
+            if(other.tag == "PlayerHitbox" && !damagedPlayer)
             {
-                PlayerLogic playerLogic = collision.gameObject.GetComponent<PlayerLogic>();
+                PlayerLogic playerLogic = other.transform.root.GetComponent<PlayerLogic>();
                 if (playerLogic)
                 {
                     playerLogic.TakeDamage(status.damage);

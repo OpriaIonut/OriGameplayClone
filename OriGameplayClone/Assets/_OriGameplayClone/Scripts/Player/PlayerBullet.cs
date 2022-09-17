@@ -61,17 +61,20 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
-            EnemyBase script = other.transform.root.GetComponent<EnemyBase>();
-            if(script)
+            if (other.tag == "EnemyHitbox")
             {
-                bool enemyDied = script.TakeDamage(damage);
-
-                if(enemyDied)
+                EnemyBase script = other.transform.root.GetComponent<EnemyBase>();
+                if (script)
                 {
-                    playerScript.EnemyDied(enemyScript);
-                }
+                    bool enemyDied = script.TakeDamage(damage);
 
-                Destroy(this.gameObject);
+                    if (enemyDied)
+                    {
+                        playerScript.EnemyDied(enemyScript);
+                    }
+
+                    Destroy(this.gameObject);
+                }
             }
         }
     }

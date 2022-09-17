@@ -16,3 +16,4 @@ MonoBehaviour:
   damage: 5
   range: 20
   attackCooldown: 1
+  speed: 1000
