@@ -155,7 +155,9 @@ namespace OriProject
                 healthBar.transform.localScale = new Vector3(healthBarFill, healthBar.transform.localScale.y, healthBar.transform.localScale.z);
 
                 Vector3 direction = (transform.position - attackerTransf.position).normalized;
-                movementScript.AddKnockback(direction, 100.0f);
+                direction.y = 0.0f;
+                direction.z = 0.0f;
+                movementScript.AddKnockback(direction);
             }
         }
 

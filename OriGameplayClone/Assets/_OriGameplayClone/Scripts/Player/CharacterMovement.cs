@@ -10,6 +10,10 @@ namespace OriProject
         public float moveSpeed = 1.0f;
         public float midairAcceleration = 10.0f; //In mid-air, if we change direction, we need to accelerate from 0 to a certain speed.
 
+        [Header("Knockback")]
+        public float knockbackPower = 500.0f;
+        public float knockbackDeacc = 1.0f;
+
         [Header("Dash")]
         public float dashSpeed = 1000.0f;
         public float dashDuration = 1.0f;
@@ -73,6 +77,9 @@ namespace OriProject
         private float dodgeRedirectAmount = 0.0f;
 
         private float bashChargeStartTime = 0.0f;
+
+        private Vector3 knockbackDir;
+        private float knockBackAmount;
 
         private Rigidbody rb;
 
@@ -175,9 +182,10 @@ namespace OriProject
             MovementLogic();
         }
 
-        public void AddKnockback(Vector3 dir, float force)
+        public void AddKnockback(Vector3 dir)
         {
-            rb.AddForce(dir * force);
+            knockbackDir = dir;
+            knockBackAmount = knockbackPower;
         }
 
         public void EnteredPropellTargetRange(PropellTarget _propellTarget)
@@ -240,7 +248,9 @@ namespace OriProject
             if (doDash)
                 xVel += dashDirection * dashSpeed;
 
-            velocity = new Vector3(xVel * Time.fixedDeltaTime, velocity.y, velocity.z) + dodgeRedirectDirection * dodgeRedirectAmount * Time.fixedDeltaTime;
+            velocity = new Vector3(xVel * Time.fixedDeltaTime, velocity.y, velocity.z) + dodgeRedirectDirection * dodgeRedirectAmount * Time.fixedDeltaTime + knockbackDir * knockBackAmount * Time.fixedDeltaTime;
+
+            knockBackAmount = Mathf.Clamp(knockBackAmount - knockbackDeacc * Time.fixedDeltaTime, 0.0f, float.MaxValue);
 
             dodgeRedirectAmount -= dodgeRedirectDeacc * Time.fixedDeltaTime;
             if (dodgeRedirectAmount < 0.0f)

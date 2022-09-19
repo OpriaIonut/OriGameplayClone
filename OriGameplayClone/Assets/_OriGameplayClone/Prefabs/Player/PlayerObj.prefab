@@ -5315,6 +5315,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 600
   midairAcceleration: 10
+  knockbackPower: 750
+  knockbackDeacc: 1000
   dashSpeed: 1250
   dashDuration: 0.5
   dashCooldown: 2

@@ -10569,6 +10569,14 @@ PrefabInstance:
       propertyPath: arrowSprite
       value: 
       objectReference: {fileID: 1674149285}
+    - target: {fileID: 1532420404, guid: be857839962066649b5fb230df4b1326, type: 3}
+      propertyPath: knockbackDeacc
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1532420404, guid: be857839962066649b5fb230df4b1326, type: 3}
+      propertyPath: knockbackPower
+      value: 750
+      objectReference: {fileID: 0}
     - target: {fileID: 1727924977117713590, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: healthBar
       value: 
