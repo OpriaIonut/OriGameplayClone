@@ -51,6 +51,7 @@ namespace OriProject
 
         public bool TakeDamage(float damageAmount)
         {
+            Debug.Log(damageAmount);
             currentHealth -= damageAmount;
             if (currentHealth <= 0.0f)
             {
