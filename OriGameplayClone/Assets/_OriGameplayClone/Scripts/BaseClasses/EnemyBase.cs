@@ -7,6 +7,7 @@ namespace OriProject
 {
     public class EnemyBase : PropellTarget
     {
+        public float speed;
         public EnemyScriptable status;
         public GameObject inPlayerRangeGfx;
         public Image healthBar;
@@ -15,11 +16,12 @@ namespace OriProject
         protected Rigidbody rb;
         protected bool isPlayerInRange = false;
         protected bool damagedPlayer = false;
+        protected float timePlayerExitedRange = 0.0f;
 
         private float currentHealth;
         private float lastAttackTime = 0.0f;
 
-        private void Start()
+        protected virtual void BaseStartCall()
         {
             currentHealth = status.health;
 
@@ -31,12 +33,9 @@ namespace OriProject
             StartCoroutine("FindPlayerRange");
         }
 
-        private void Update()
+        protected virtual void  BaseUpdateCall()
         {
-            if (isPlayerInRange)
-                MoveTowardsPlayer();
-            else
-                MoveNoTarget();
+            MovementLogic();
 
             if(isPlayerInRange && Time.time - lastAttackTime > status.attackCooldown)
             {
@@ -71,12 +70,7 @@ namespace OriProject
             Destroy(this.gameObject);
         }
 
-        protected virtual void MoveTowardsPlayer()
-        {
-            //Intentionally left empty
-        }
-
-        protected virtual void MoveNoTarget()
+        protected virtual void MovementLogic()
         {
             //Intentionally left empty
         }
@@ -90,10 +84,15 @@ namespace OriProject
         {
             while(true)
             {
-                isPlayerInRange = false;
                 if(Vector3.Distance(playerTransf.position, transform.position) < status.range)
                 {
                     isPlayerInRange = true;
+                }
+                else
+                {
+                    if (isPlayerInRange)
+                        timePlayerExitedRange = Time.time;
+                    isPlayerInRange = false;
                 }
                 yield return new WaitForSeconds(0.1f);
             }
@@ -106,9 +105,15 @@ namespace OriProject
                 PlayerLogic playerLogic = other.transform.root.GetComponent<PlayerLogic>();
                 if (playerLogic)
                 {
-                    playerLogic.TakeDamage(status.damage);
+                    playerLogic.TakeDamage(status.damage, transform);
                 }
             }
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, status.range);
         }
     }
 }

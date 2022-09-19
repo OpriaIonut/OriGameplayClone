@@ -175,6 +175,11 @@ namespace OriProject
             MovementLogic();
         }
 
+        public void AddKnockback(Vector3 dir, float force)
+        {
+            rb.AddForce(dir * force);
+        }
+
         public void EnteredPropellTargetRange(PropellTarget _propellTarget)
         {
             propellTargets.Add(_propellTarget);

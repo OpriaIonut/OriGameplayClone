@@ -13,20 +13,25 @@ namespace OriProject
         private bool isGrounded = false;
         private float reachedGroundTime = 0.0f;
 
-        protected override void MoveNoTarget()
+        private void Start()
         {
-            //Intentionally left empty
+            BaseStartCall();
         }
 
-        protected override void MoveTowardsPlayer()
+        private void Update()
         {
-            if (isGrounded && Time.time - reachedGroundTime > delayBetweenJumps)
+            BaseUpdateCall();
+        }
+
+        protected override void MovementLogic()
+        {
+            if (isPlayerInRange && isGrounded && Time.time - reachedGroundTime > delayBetweenJumps)
             {
                 isGrounded = false;
                 damagedPlayer = false;
 
                 float horizontalAmount = playerTransf.position.x - transform.position.x;
-                horizontalAmount *= status.speed;
+                horizontalAmount *= speed;
                 if (Mathf.Abs(horizontalAmount) > horizontalPropellLimit)
                 {
                     if (horizontalAmount > 0.0f)

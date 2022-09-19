@@ -11,6 +11,5 @@ namespace OriProject
         public float damage;
         public float range;
         public float attackCooldown;
-        public float speed;
     }
 }

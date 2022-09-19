@@ -11,6 +11,7 @@ namespace OriProject
         public GameObject debugSphere;
 
         private Vector3 startPoint;
+        private Transform endPointTransf = null;
         private Vector3 endPoint;
         private Vector3 calculatedMiddle;
 
@@ -28,6 +29,23 @@ namespace OriProject
             {
                 DestroyImmediate(gameObject);
             }
+        }
+
+        public void Init(PlayerLogic _playerScript, EnemyBase enemy, Vector3 _startPoint, Transform _endPoint, float _damage)
+        {
+            playerScript = _playerScript;
+            enemyScript = enemy;
+
+            startPoint = _startPoint;
+            endPointTransf = _endPoint;
+            calculatedMiddle = (startPoint + endPointTransf.position) / 2.0f;
+            damage = _damage;
+
+            float yDiff = endPointTransf.position.y - startPoint.y;
+            if (Mathf.Abs(yDiff) < 0.1f)
+                yDiff = 0.5f;
+
+            calculatedMiddle.y += yDiff * middleHeightFactor;
         }
 
         public void Init(PlayerLogic _playerScript, EnemyBase enemy, Vector3 _startPoint, Vector3 _endPoint, float _damage)
@@ -49,6 +67,9 @@ namespace OriProject
 
         private void MoveBullet()
         {
+            if (endPointTransf)
+                endPoint = endPointTransf.position;
+
             Vector3 calculatedPos = Vector3.Lerp(startPoint, endPoint, currentInterpolation);
             float yFact = -4.0f * middleHeightFactor * currentInterpolation * currentInterpolation + 4.0f * middleHeightFactor * currentInterpolation;
             calculatedPos.y = yFact + Mathf.Lerp(startPoint.y, endPoint.y, currentInterpolation);

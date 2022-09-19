@@ -31,6 +31,7 @@ namespace OriProject
         private float attackRechargeTime = 0.0f;
 
         private EnemyDetector enemyDetector;
+        private CharacterMovement movementScript;
 
         private float chargeStartTime = 0.0f;
         private bool isCharging = false;
@@ -43,6 +44,7 @@ namespace OriProject
         {
             currentHealth = maxHealth;
             enemyDetector = GetComponentInChildren<EnemyDetector>();
+            movementScript = GetComponent<CharacterMovement>();
             enemyDetector.SetRadius(radius);
         }
 
@@ -112,7 +114,7 @@ namespace OriProject
                         Destroy(clone, 10.0f);
 
                         PlayerBullet script = clone.GetComponent<PlayerBullet>();
-                        script.Init(this, targetedEnemies[index], bulletSpawnPoint.position, targetedEnemies[index].transform.position, damage);
+                        script.Init(this, targetedEnemies[index], bulletSpawnPoint.position, targetedEnemies[index].transform, damage);
                     }
                 }
 
@@ -142,7 +144,7 @@ namespace OriProject
             }
         }
 
-        public void TakeDamage(float damage)
+        public void TakeDamage(float damage, Transform attackerTransf)
         {
             currentHealth -= damage;
             if (currentHealth <= 0.0f)
@@ -151,6 +153,9 @@ namespace OriProject
             {
                 float healthBarFill = currentHealth / maxHealth;
                 healthBar.transform.localScale = new Vector3(healthBarFill, healthBar.transform.localScale.y, healthBar.transform.localScale.z);
+
+                Vector3 direction = (transform.position - attackerTransf.position).normalized;
+                movementScript.AddKnockback(direction, 100.0f);
             }
         }
 
