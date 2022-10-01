@@ -245,6 +245,13 @@ MonoBehaviour:
   healthBar: {fileID: 778895806055290392}
   waypointTransf1: {fileID: 1577943205}
   waypointTransf2: {fileID: 686354461}
+  bulletPrefab: {fileID: 172062730232192988, guid: c95ea8e5afc2a85439f67a2488c1311b, type: 3}
+  numOfBullets: 3
+  shootDir: {x: 0, y: 1, z: 0}
+  shootUpForce: 500
+  shootHorizontalForce: 250
+  randomHorizontalStride: 125
+  randomVerticalStride: 50
 --- !u!1 &778895805375025591
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,7 +558,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: ddacdc5ed95a30444b67afc4b0d435b2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

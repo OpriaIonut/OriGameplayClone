@@ -15,4 +15,4 @@ MonoBehaviour:
   health: 100
   damage: 5
   range: 15
-  attackCooldown: 1
+  attackCooldown: 7

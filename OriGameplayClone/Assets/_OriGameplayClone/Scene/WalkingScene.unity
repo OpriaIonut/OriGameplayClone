@@ -5097,6 +5097,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 778895804942624746, guid: a8ea21a24e07e19468f00dc7c02c8065, type: 3}
+      propertyPath: shootDir.y
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 778895804942624747, guid: a8ea21a24e07e19468f00dc7c02c8065, type: 3}
       propertyPath: m_Name
       value: EnemySlime (1)
@@ -10231,6 +10235,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 778895804942624746, guid: a8ea21a24e07e19468f00dc7c02c8065, type: 3}
+      propertyPath: shootDir.x
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 778895804942624747, guid: a8ea21a24e07e19468f00dc7c02c8065, type: 3}
       propertyPath: m_Name
       value: EnemySlime (2)
@@ -10800,14 +10808,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 686354460, guid: a8ea21a24e07e19468f00dc7c02c8065, type: 3}
-      propertyPath: m_Icon
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1577943204, guid: a8ea21a24e07e19468f00dc7c02c8065, type: 3}
-      propertyPath: m_Icon
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 778895804942624725, guid: a8ea21a24e07e19468f00dc7c02c8065, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -10851,6 +10851,30 @@ PrefabInstance:
     - target: {fileID: 778895804942624725, guid: a8ea21a24e07e19468f00dc7c02c8065, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 778895804942624746, guid: a8ea21a24e07e19468f00dc7c02c8065, type: 3}
+      propertyPath: shootDir.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 778895804942624746, guid: a8ea21a24e07e19468f00dc7c02c8065, type: 3}
+      propertyPath: randomStride
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 778895804942624746, guid: a8ea21a24e07e19468f00dc7c02c8065, type: 3}
+      propertyPath: shootUpForce
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 778895804942624746, guid: a8ea21a24e07e19468f00dc7c02c8065, type: 3}
+      propertyPath: randomVerticalStride
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 778895804942624746, guid: a8ea21a24e07e19468f00dc7c02c8065, type: 3}
+      propertyPath: shootHorizontalForce
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 778895804942624746, guid: a8ea21a24e07e19468f00dc7c02c8065, type: 3}
+      propertyPath: randomHorizontalStride
+      value: 125
       objectReference: {fileID: 0}
     - target: {fileID: 778895804942624747, guid: a8ea21a24e07e19468f00dc7c02c8065, type: 3}
       propertyPath: m_Name
