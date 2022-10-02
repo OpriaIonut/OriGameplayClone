@@ -163,6 +163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propellForce: 25
+  targetTransf: {fileID: 6925087137695062882}
 --- !u!1 &6925087138919569340
 GameObject:
   m_ObjectHideFlags: 0

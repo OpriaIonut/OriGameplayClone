@@ -231,6 +231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propellForce: 75
+  targetTransf: {fileID: 8224023836426724332}
   speed: 150
   status: {fileID: 11400000, guid: 3daea56438f37bf438500a6ed68f38d7, type: 2}
   inPlayerRangeGfx: {fileID: 8224023836725441849}
@@ -300,7 +301,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8224023836725441854
 Transform:
   m_ObjectHideFlags: 0

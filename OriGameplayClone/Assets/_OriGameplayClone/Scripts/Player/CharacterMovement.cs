@@ -148,17 +148,17 @@ namespace OriProject
                     focusingPropellTarget = true;
                     Time.timeScale = 0.3f;
                     Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-                    Vector3 direction = mouseWorldPos - propellTarget.transform.position;
+                    Vector3 direction = mouseWorldPos - propellTarget.targetTransf.transform.position;
 
                     arrowSprite.gameObject.SetActive(true);
 
-                    arrowSprite.position = Camera.main.WorldToScreenPoint(propellTarget.transform.position);
+                    arrowSprite.position = Camera.main.WorldToScreenPoint(propellTarget.targetTransf.transform.position);
                     arrowSprite.rotation = Quaternion.LookRotation(Vector3.forward, direction.normalized);
                 }
                 if (Input.GetMouseButtonUp(1) && propellTarget != null)
                 {
                     Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-                    Vector3 direction = mouseWorldPos - propellTarget.transform.position;
+                    Vector3 direction = mouseWorldPos - propellTarget.targetTransf.transform.position;
 
                     rb.velocity = new Vector3(rb.velocity.x, 0.0f, 0.0f);
                     canDoubleJump = true;

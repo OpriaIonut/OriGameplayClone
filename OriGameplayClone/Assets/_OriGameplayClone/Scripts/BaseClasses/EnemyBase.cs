@@ -80,7 +80,7 @@ namespace OriProject
             damagedPlayer = false;
         }
 
-        private IEnumerator FindPlayerRange()
+        protected virtual IEnumerator FindPlayerRange()
         {
             while(true)
             {

@@ -8,10 +8,11 @@ namespace OriProject
     public abstract class PropellTarget : MonoBehaviour
     {
         public float propellForce = 100.0f;
+        public Transform targetTransf;
 
         public virtual void LaunchTarget(Vector3 direction)
         {
-            GetComponent<Rigidbody>().AddForce(direction * propellForce);
+            targetTransf.GetComponent<Rigidbody>().AddForce(direction * propellForce);
         }
 
         public virtual void OnPlayerEnteredRange()

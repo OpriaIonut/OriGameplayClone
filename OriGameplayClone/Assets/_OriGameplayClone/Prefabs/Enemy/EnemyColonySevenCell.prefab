@@ -218,7 +218,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7351478114926526672
 Transform:
   m_ObjectHideFlags: 0
@@ -347,6 +347,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propellForce: 75
+  targetTransf: {fileID: 7351478115099678210}
   speed: 200
   status: {fileID: 11400000, guid: 16bd67b1f7fc69345b9f7546c1da4136, type: 2}
   inPlayerRangeGfx: {fileID: 7351478114926526679}
