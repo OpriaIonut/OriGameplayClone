@@ -67,6 +67,16 @@ namespace OriProject
                 isCharging = true;
                 chargeStartTime = Time.time;
 
+
+                for (int index = 0; index < enemiesInRange.Count; index++)
+                {
+                    if (enemiesInRange[index] == null)
+                    {
+                        enemiesInRange.RemoveAt(index);
+                        index--;
+                    }
+                }
+
                 List<EnemyBase> targetedEnemies = new List<EnemyBase>(enemiesInRange);
                 if (enemiesInRange.Count > maxNumOfEnemies)
                 {
@@ -86,7 +96,6 @@ namespace OriProject
                         targetedEnemies.Add(enemiesInRange[enemyID]);
                     }
                 }
-
 
                 int count = Math.Min(targetedEnemies.Count, maxNumOfEnemies);
                 if (count == 0)
@@ -174,7 +183,7 @@ namespace OriProject
 
         public void AddEnemyInRange(EnemyBase enemy)
         {
-            if (!enemiesInRange.Contains(enemy))
+            if (enemy != null && !enemiesInRange.Contains(enemy))
             {
                 enemiesInRange.Add(enemy);
                 enemy.IsInPlayerRange(true);
@@ -183,7 +192,7 @@ namespace OriProject
 
         public void RemoveEnemyInRange(EnemyBase enemy)
         {
-            if (enemiesInRange.Contains(enemy))
+            if (enemy != null && enemiesInRange.Contains(enemy))
             {
                 enemiesInRange.Remove(enemy);
                 enemy.IsInPlayerRange(false);
