@@ -4,54 +4,31 @@ using UnityEngine;
 
 namespace OriProject
 {
-    public class PlayerBullet : MonoBehaviour
+    public class PukingFrogBullet : MonoBehaviour
     {
         public float interpolationTime = 0.5f;
         public float middleHeightFactor = 3.0f;
 
         private Vector3 startPoint;
-        private Transform endPointTransf = null;
         private Vector3 endPoint;
         private Vector3 calculatedMiddle;
 
         private float damage;
         private float currentInterpolation = 0.0f;
+        private float spawnTime = 0.0f;
 
-        private PlayerLogic playerScript;
-        private EnemyBase enemyScript;
+        private void Start()
+        {
+            spawnTime = Time.time;
+        }
 
         private void Update()
         {
             MoveBullet();
-
-            if(enemyScript == null && currentInterpolation >= 1.0f)
-            {
-                DestroyImmediate(gameObject);
-            }
         }
 
-        public void Init(PlayerLogic _playerScript, EnemyBase enemy, Vector3 _startPoint, Transform _endPoint, float _damage)
+        public void Init(Vector3 _startPoint, Vector3 _endPoint, float _damage)
         {
-            playerScript = _playerScript;
-            enemyScript = enemy;
-
-            startPoint = _startPoint;
-            endPointTransf = _endPoint;
-            calculatedMiddle = (startPoint + endPointTransf.position) / 2.0f;
-            damage = _damage;
-
-            float yDiff = endPointTransf.position.y - startPoint.y;
-            if (Mathf.Abs(yDiff) < 0.1f)
-                yDiff = 0.5f;
-
-            calculatedMiddle.y += yDiff * middleHeightFactor;
-        }
-
-        public void Init(PlayerLogic _playerScript, EnemyBase enemy, Vector3 _startPoint, Vector3 _endPoint, float _damage)
-        {
-            playerScript = _playerScript;
-            enemyScript = enemy;
-
             startPoint = _startPoint;
             endPoint = _endPoint;
             calculatedMiddle = (startPoint + endPoint) / 2.0f;
@@ -66,9 +43,6 @@ namespace OriProject
 
         private void MoveBullet()
         {
-            if (endPointTransf)
-                endPoint = endPointTransf.position;
-
             Vector3 calculatedPos = Vector3.Lerp(startPoint, endPoint, currentInterpolation);
             float yFact = -4.0f * middleHeightFactor * currentInterpolation * currentInterpolation + 4.0f * middleHeightFactor * currentInterpolation;
             calculatedPos.y = yFact + Mathf.Lerp(startPoint.y, endPoint.y, currentInterpolation);
@@ -81,20 +55,19 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.tag == "EnemyHitbox")
+            if (other.tag == "PlayerHitbox")
             {
-                EnemyBase script = other.transform.root.GetComponent<EnemyBase>();
+                PlayerLogic script = other.transform.root.GetComponent<PlayerLogic>();
                 if (script)
                 {
-                    bool enemyDied = script.TakeDamage(damage);
-
-                    if (enemyDied)
-                    {
-                        playerScript.EnemyDied(enemyScript);
-                    }
-
+                    script.TakeDamage(damage, transform);
                     Destroy(this.gameObject);
                 }
+            }
+            else if(other.tag == "GroundPlatform" || other.tag == "ClimbableWall" || other.tag == "BreakablePlatform")
+            {
+                if (Time.time - spawnTime > 0.25f)
+                    Destroy(this.gameObject);
             }
         }
     }

@@ -19,7 +19,7 @@ namespace OriProject
         protected float timePlayerExitedRange = 0.0f;
 
         private float currentHealth;
-        private float lastAttackTime = 0.0f;
+        protected float lastAttackTime = 0.0f;
 
         protected virtual void BaseStartCall()
         {
