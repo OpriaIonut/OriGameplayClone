@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace OriProject
 {
-    public class PukingFrogBullet : MonoBehaviour
+    public class PukingFrogBullet : PropellTarget
     {
         public float interpolationTime = 0.5f;
         public float middleHeightFactor = 3.0f;
@@ -16,6 +16,8 @@ namespace OriProject
         private float damage;
         private float currentInterpolation = 0.0f;
         private float spawnTime = 0.0f;
+
+        private bool launchedTarget = false;
 
         private void Start()
         {
@@ -41,8 +43,17 @@ namespace OriProject
             calculatedMiddle.y += yDiff * middleHeightFactor;
         }
 
+        public override void LaunchTarget(Vector3 direction)
+        {
+            base.LaunchTarget(direction);
+            launchedTarget = true;
+        }
+
         private void MoveBullet()
         {
+            if (launchedTarget)
+                return;
+
             Vector3 calculatedPos = Vector3.Lerp(startPoint, endPoint, currentInterpolation);
             float yFact = -4.0f * middleHeightFactor * currentInterpolation * currentInterpolation + 4.0f * middleHeightFactor * currentInterpolation;
             calculatedPos.y = yFact + Mathf.Lerp(startPoint.y, endPoint.y, currentInterpolation);
@@ -55,12 +66,21 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.tag == "PlayerHitbox")
+            if (!launchedTarget && other.tag == "PlayerHitbox")
             {
                 PlayerLogic script = other.transform.root.GetComponent<PlayerLogic>();
                 if (script)
                 {
                     script.TakeDamage(damage, transform);
+                    Destroy(this.gameObject);
+                }
+            }
+            else if(launchedTarget && other.tag == "EnemyHitbox")
+            {
+                EnemyBase script = other.transform.root.GetComponent<EnemyBase>();
+                if(script)
+                {
+                    script.TakeDamage(damage * 5.0f);
                     Destroy(this.gameObject);
                 }
             }
