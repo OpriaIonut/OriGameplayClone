@@ -10,6 +10,7 @@ TagManager:
   - PlayerHitbox
   - EnemyHitbox
   - PropellTarget
+  - UnclimbableWall
   layers:
   - Default
   - TransparentFX
