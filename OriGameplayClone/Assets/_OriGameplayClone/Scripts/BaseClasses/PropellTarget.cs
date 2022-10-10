@@ -5,7 +5,7 @@ using UnityEngine;
 namespace OriProject
 {
     [RequireComponent(typeof(Rigidbody))]
-    public abstract class PropellTarget : MonoBehaviour
+    public class PropellTarget : MonoBehaviour
     {
         public float propellForce = 100.0f;
         public Transform targetTransf;
