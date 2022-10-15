@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &803382914560090647
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 59331292748477787}
+  m_Layer: 0
+  m_Name: FloorDetector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &59331292748477787
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803382914560090647}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.43, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 899184874878501151}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &899184874453233457
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,6 +203,7 @@ Transform:
   - {fileID: 899184874453233456}
   - {fileID: 899184875115298287}
   - {fileID: 899184875043264461}
+  - {fileID: 59331292748477787}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -210,6 +241,11 @@ MonoBehaviour:
   status: {fileID: 11400000, guid: e18217007f0a2a8448b2bc2cf480150e, type: 2}
   inPlayerRangeGfx: {fileID: 899184875043264458}
   healthBar: {fileID: 899184875526143026}
+  floorDetector: {fileID: 59331292748477787}
+  detectionDistance: 0.15
+  platformsLayer:
+    serializedVersion: 2
+    m_Bits: 512
   jumpMovement: 1
   spawnChildOnDeath: 1
   child: {fileID: 5031223024877968178, guid: 068d3cd9d4b0aad42b6bc20bdbd16da8, type: 3}

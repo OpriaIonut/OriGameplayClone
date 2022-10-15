@@ -6,6 +6,10 @@ namespace OriProject
 {
     public class EnemyRhino : EnemyBase
     {
+        public Transform wallDetector;
+        public float detectionDistance = 0.15f;
+        public LayerMask platformsLayer;
+
         public float maxMoveDistance = 25.0f;
 
         private float horizontalMoveDir = 1.0f;
@@ -70,14 +74,28 @@ namespace OriProject
             }
         }
 
+        private IEnumerator CheckPlatforms()
+        {
+            while (true)
+            {
+                yield return null;
+
+                RaycastHit hitInfo;
+                if (Physics.Raycast(wallDetector.position, wallDetector.forward, out hitInfo, detectionDistance, platformsLayer))
+                {
+                    movementEndTime = Time.time;
+                    startedMovement = false;
+                }
+            }
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             OnTriggerEnterBase(other);
 
             if(other.tag == "ClimbableWall" || other.tag == "UnclimbableWall")
             {
-                movementEndTime = Time.time;
-                startedMovement = false;
+                
             }
         }
     }

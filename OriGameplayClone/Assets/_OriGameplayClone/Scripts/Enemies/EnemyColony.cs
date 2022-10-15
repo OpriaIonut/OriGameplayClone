@@ -6,6 +6,10 @@ namespace OriProject
 {
     public class EnemyColony : EnemyBase
     {
+        public Transform floorDetector;
+        public float detectionDistance = 0.15f;
+        public LayerMask platformsLayer;
+
         public bool jumpMovement = true;
         public bool spawnChildOnDeath = true;
         public GameObject child;
@@ -19,6 +23,7 @@ namespace OriProject
         private void Start()
         {
             BaseStartCall();
+            StartCoroutine(CheckPlatforms());
         }
 
         private void Update()
@@ -81,24 +86,29 @@ namespace OriProject
             }
         }
 
-        private void OnTriggerEnter(Collider other)
+        private IEnumerator CheckPlatforms()
         {
-            OnTriggerEnterBase(other);
-
-            if (other.tag == "GroundPlatform" || other.tag == "BreakablePlatform")
+            while (true)
             {
-                isGrounded = true;
-                groundHitTime = Time.time;
-                rb.velocity = Vector3.zero;
+                yield return null;
+
+                RaycastHit hitInfo;
+                if (Physics.Raycast(floorDetector.position, Vector3.down, out hitInfo, detectionDistance, platformsLayer))
+                {
+                    isGrounded = true;
+                    groundHitTime = Time.time;
+                    rb.velocity = Vector3.zero;
+                }
+                else
+                {
+                    isGrounded = false;
+                }
             }
         }
 
-        private void OnTriggerExit(Collider other)
+        private void OnTriggerEnter(Collider other)
         {
-            if(other.tag == "GroundPlatform" || other.tag == "BreakablePlatform")
-            {
-                isGrounded = false;
-            }
+            OnTriggerEnterBase(other);
         }
     }
 }

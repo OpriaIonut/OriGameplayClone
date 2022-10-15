@@ -6,6 +6,12 @@ namespace OriProject
 {
     public class CharacterMovement : MonoBehaviour
     {
+        [Header("Detection")]
+        public Transform floorDetector;
+        public Transform wallDetector;
+        public LayerMask platformsLayer;
+        public float detectionDistance = 0.1f;
+
         [Header("Movement")]
         public float moveSpeed = 1.0f;
         public float midairAcceleration = 10.0f; //In mid-air, if we change direction, we need to accelerate from 0 to a certain speed.
@@ -86,6 +92,8 @@ namespace OriProject
         private void Start()
         {
             rb = transform.root.GetComponent<Rigidbody>();
+
+            StartCoroutine(CheckPlatforms());
         }
 
         private void Update()
@@ -180,6 +188,48 @@ namespace OriProject
         private void FixedUpdate()
         {
             MovementLogic();
+        }
+
+        private IEnumerator CheckPlatforms()
+        {
+            while(true)
+            {
+                yield return null;
+
+                RaycastHit hitInfo;
+                if (Physics.Raycast(floorDetector.position, Vector3.down, out hitInfo, detectionDistance, platformsLayer))
+                {
+                    if (doStomp && hitInfo.collider.tag == "BreakablePlatform")
+                    {
+                        hitInfo.collider.gameObject.SetActive(false);
+                    }
+
+                    isGrounded = true;
+                    canDoubleJump = true;
+                    canDash = true;
+                    dodgeRedirectAmount = 0.0f;
+                    accelerationFactor = 1.0f;
+                    wallJumpPropulsion = 0.0f;
+                    doStomp = false;
+                }
+                else
+                {
+                    isGrounded = false;
+                }
+
+                if(Physics.Raycast(wallDetector.position, wallDetector.forward, out hitInfo, detectionDistance, platformsLayer))
+                {
+                    canWallJump = true;
+                    canDoubleJump = true;
+                    dodgeRedirectAmount = 0.0f;
+                    wallDirection = -wallDetector.forward.x;
+                    wallDirection /= Mathf.Abs(wallDirection); //Convert it to -1 or 1
+                }
+                else
+                {
+                    canWallJump = false;
+                }
+            }
         }
 
         public void AddKnockback(Vector3 dir)
@@ -318,45 +368,6 @@ namespace OriProject
                 rb.velocity = new Vector3(rb.velocity.x, Mathf.Clamp(velocity.y, -stompGravityLimiter, float.MaxValue), 0.0f);
             else if (!isGrounded && holdingShift)
                 rb.velocity = new Vector3(rb.velocity.x, Mathf.Clamp(velocity.y, -hoverGravityLimiter, float.MaxValue), 0.0f);
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.tag == "ClimbableWall")
-            {
-                canWallJump = true;
-                canDoubleJump = true;
-                dodgeRedirectAmount = 0.0f;
-                wallDirection = other.transform.position.x - transform.position.x;
-                wallDirection /= Mathf.Abs(wallDirection); //Convert it to -1 or 1
-            }
-            else if (other.tag == "GroundPlatform" || other.tag == "BreakablePlatform")
-            {
-                if (doStomp && other.tag == "BreakablePlatform")
-                {
-                    other.transform.parent.gameObject.SetActive(false);
-                }
-
-                isGrounded = true;
-                canDoubleJump = true;
-                canDash = true;
-                dodgeRedirectAmount = 0.0f;
-                accelerationFactor = 1.0f;
-                wallJumpPropulsion = 0.0f;
-                doStomp = false;
-            }
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.tag == "ClimbableWall")
-            {
-                canWallJump = false;
-            }
-            else if (other.tag == "GroundPlatform" || other.tag == "BreakablePlatform")
-            {
-                isGrounded = false;
-            }
         }
     }
 }

@@ -89,6 +89,36 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.5, y: 3, z: 1}
   m_Center: {x: 0, y: -0.5, z: 0}
+--- !u!1 &6721652064635259058
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4272536753738228506}
+  m_Layer: 0
+  m_Name: FloorDetector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4272536753738228506
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6721652064635259058}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.98, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 9193820763519591643}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9193820763519591653
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,6 +152,7 @@ Transform:
   - {fileID: 9193820763844393016}
   - {fileID: 9193820764237468350}
   - {fileID: 719713565}
+  - {fileID: 4272536753738228506}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -159,6 +190,11 @@ MonoBehaviour:
   status: {fileID: 11400000, guid: 68b79073ba0e94140a005b7c1f533b4a, type: 2}
   inPlayerRangeGfx: {fileID: 9193820763844393019}
   healthBar: {fileID: 9193820764629898518}
+  floorDetector: {fileID: 4272536753738228506}
+  detectionDistance: 0.15
+  platformsLayer:
+    serializedVersion: 2
+    m_Bits: 512
   delayBetweenJumps: 1
   upwardsPropell: 500
   horizontalPropellLimit: 150
