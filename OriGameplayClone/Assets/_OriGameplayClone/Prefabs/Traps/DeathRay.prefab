@@ -66,10 +66,10 @@ MonoBehaviour:
   laserRay: {fileID: 1511625855077494945}
   laserLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 768
   horizontalLaser: 1
   fireDuration: 5
-  fireCooldown: 15
+  fireCooldown: 10
 --- !u!1 &1511625854885979333
 GameObject:
   m_ObjectHideFlags: 0

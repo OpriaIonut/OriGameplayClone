@@ -120,6 +120,7 @@ MonoBehaviour:
   waypointTransf2: {fileID: 3263061572440011080}
   firePoint: {fileID: 1157339262}
   bulletPrefab: {fileID: 4143380062624511680, guid: eb9a0216c36957243afcf63751c5d084, type: 3}
+  canMove: 1
 --- !u!1 &2848395568436410976
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,7 +147,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2848395568436410976}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalPosition: {x: 0, y: 3.32, z: 0}
   m_LocalScale: {x: 0.25, y: 0.5, z: 0.25}
   m_Children: []
   m_Father: {fileID: 2848395568157222528}
@@ -239,7 +240,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 2}
+  m_AnchoredPosition: {x: 0, y: 4.21}
   m_SizeDelta: {x: 75, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &2848395568848359656

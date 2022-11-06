@@ -14,6 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   damage: 5
-  range: 20
+  range: 15
   attackCooldown: 1
-  speed: 1000

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace OriProject
 {
-    public class ArachneBullet : MonoBehaviour
+    public class ArachneBullet : PropellTarget
     {
         public float speed = 10.0f;
 

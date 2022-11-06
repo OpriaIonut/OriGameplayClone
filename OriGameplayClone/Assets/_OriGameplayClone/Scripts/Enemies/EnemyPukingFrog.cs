@@ -11,6 +11,7 @@ namespace OriProject
         public Transform waypointTransf2;
         public Transform firePoint;
         public GameObject bulletPrefab;
+        public bool canMove = true;
 
         private Vector3 waypoint1 = Vector3.zero;
         private Vector3 waypoint2 = Vector3.zero;
@@ -40,7 +41,8 @@ namespace OriProject
 
         private void FixedUpdate()
         {
-            MovementLogic();
+            if(canMove)
+                MovementLogic();
         }
 
         protected override void MovementLogic()
@@ -95,6 +97,9 @@ namespace OriProject
         {
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, status.range);
+
+            if (!canMove)
+                return;
 
             if (waypoint1 == Vector3.zero)
             {
