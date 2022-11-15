@@ -20,12 +20,12 @@ namespace OriProject
         private void Start()
         {
             BaseStartCall();
+            StartCoroutine(CheckPlatforms());
         }
 
         private void Update()
         {
             BaseUpdateCall();
-            StartCoroutine(CheckPlatforms());
         }
 
         protected override void MovementLogic()
@@ -57,15 +57,19 @@ namespace OriProject
 
         private IEnumerator CheckPlatforms()
         {
+            WaitForSeconds wait = new WaitForSeconds(0.25f);
             while (true)
             {
-                yield return null;
+                yield return wait;
 
                 RaycastHit hitInfo;
                 if (Physics.Raycast(floorDetector.position, Vector3.down, out hitInfo, detectionDistance, platformsLayer))
                 {
-                    isGrounded = true;
-                    reachedGroundTime = Time.time;
+                    if (!isGrounded)
+                    {
+                        isGrounded = true;
+                        reachedGroundTime = Time.time;
+                    }
                 }
                 else
                 {

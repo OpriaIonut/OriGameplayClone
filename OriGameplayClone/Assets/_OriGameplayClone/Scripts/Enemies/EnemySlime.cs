@@ -53,7 +53,7 @@ namespace OriProject
                 Vector3 propellForce = shootDir * (shootUpForce + verticalStride) + playerDir * (shootHorizontalForce + horizontalStride);
 
                 script.Init(status.damage, propellForce);
-                Destroy(clone, 10.0f);
+                Destroy(clone, 5.0f);
             }
         }
 

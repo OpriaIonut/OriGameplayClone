@@ -238,7 +238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9e106128b802a34c875c2178e5448f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propellForce: 100
+  propellForce: 0
   targetTransf: {fileID: 778895804942624725}
   speed: 2
   status: {fileID: 11400000, guid: 47332ef23c9bdfd43a02cf2cad54c1ac, type: 2}

@@ -12,9 +12,12 @@ namespace OriProject
 
         public virtual void LaunchTarget(Vector3 direction)
         {
-            Rigidbody rigidbody = targetTransf.GetComponent<Rigidbody>();
-            rigidbody.isKinematic = false;
-            rigidbody.AddForce(direction * propellForce);
+            if (propellForce > 0.0f)
+            {
+                Rigidbody rigidbody = targetTransf.GetComponent<Rigidbody>();
+                rigidbody.isKinematic = false;
+                rigidbody.AddForce(direction * propellForce);
+            }
         }
 
         public virtual void OnPlayerEnteredRange()

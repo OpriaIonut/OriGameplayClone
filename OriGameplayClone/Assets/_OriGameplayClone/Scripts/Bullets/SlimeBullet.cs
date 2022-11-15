@@ -24,6 +24,7 @@ namespace OriProject
                 if(playerScript)
                 {
                     playerScript.TakeDamage(damage, transform);
+                    Destroy(gameObject);
                 }
             }
             else if(other.tag == "GroundPlatform" || other.tag == "ClimbableWall" || other.tag == "BreakablePlatform")

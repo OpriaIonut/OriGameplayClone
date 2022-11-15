@@ -88,9 +88,10 @@ namespace OriProject
 
         private IEnumerator CheckPlatforms()
         {
+            WaitForSeconds wait = new WaitForSeconds(0.25f);
             while (true)
             {
-                yield return null;
+                yield return wait;
 
                 RaycastHit hitInfo;
                 if (Physics.Raycast(floorDetector.position, Vector3.down, out hitInfo, detectionDistance, platformsLayer))

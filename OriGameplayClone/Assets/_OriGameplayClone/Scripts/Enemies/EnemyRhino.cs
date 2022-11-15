@@ -18,6 +18,9 @@ namespace OriProject
         private bool startedMovement = false;
         private float movementEndTime = 0.0f;
 
+        private bool hitWall = false;
+        private float wallDir = 0.0f;
+
         private void Start()
         {
             BaseStartCall();
@@ -35,7 +38,7 @@ namespace OriProject
 
         protected override void MovementLogic()
         {
-            if(isPlayerInRange && startedMovement && Time.time - movementEndTime > status.attackCooldown)
+            if(startedMovement && Time.time - movementEndTime > status.attackCooldown)
             {
                 transform.position += Vector3.right * horizontalMoveDir * speed * Time.deltaTime;
 
@@ -62,6 +65,11 @@ namespace OriProject
                         startedMovement = true;
                         moveStartPos = transform.position;
                         horizontalMoveDir = playerTransf.position.x > transform.position.x ? 1.0f : -1.0f;
+
+                        float rotAngle = horizontalMoveDir > 0.0f ? 0.0f : -180.0f;
+                        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, rotAngle, transform.rotation.eulerAngles.z);
+
+                        CheckPlatforms();
                     }
                 }
                 else
@@ -74,18 +82,13 @@ namespace OriProject
             }
         }
 
-        private IEnumerator CheckPlatforms()
+        private void CheckPlatforms()
         {
-            while (true)
+            RaycastHit hitInfo;
+            if (Physics.Raycast(wallDetector.position, wallDetector.forward, out hitInfo, detectionDistance, platformsLayer))
             {
-                yield return null;
-
-                RaycastHit hitInfo;
-                if (Physics.Raycast(wallDetector.position, wallDetector.forward, out hitInfo, detectionDistance, platformsLayer))
-                {
-                    movementEndTime = Time.time;
-                    startedMovement = false;
-                }
+                movementEndTime = Time.time;
+                startedMovement = false;
             }
         }
 
@@ -95,7 +98,8 @@ namespace OriProject
 
             if(other.tag == "ClimbableWall" || other.tag == "UnclimbableWall")
             {
-                
+                movementEndTime = Time.time;
+                startedMovement = false;
             }
         }
     }

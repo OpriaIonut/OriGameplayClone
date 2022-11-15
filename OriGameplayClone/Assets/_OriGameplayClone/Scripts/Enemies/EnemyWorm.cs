@@ -21,9 +21,9 @@ namespace OriProject
 
         protected override void Attack()
         {
-            float xPlayerDir = playerTransf.position.x - transform.position.x;
-            float rotAngle = xPlayerDir > 0.0f ? 0.0f : -180.0f;
-            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, rotAngle, transform.rotation.eulerAngles.z);
+            //float xPlayerDir = playerTransf.position.x - transform.position.x;
+            //float rotAngle = xPlayerDir > 0.0f ? 0.0f : -180.0f;
+            //transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, rotAngle, transform.rotation.eulerAngles.z);
 
             GameObject clone = Instantiate(bulletPrefab);
             clone.transform.position = firePoint.position;

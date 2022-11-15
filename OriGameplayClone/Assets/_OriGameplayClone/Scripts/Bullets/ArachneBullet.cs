@@ -11,6 +11,7 @@ namespace OriProject
         private Vector3 direction;
         private bool isInitialized = false;
         private float damage;
+        private bool hitPlayer = true;
 
         private void Update()
         {
@@ -25,14 +26,29 @@ namespace OriProject
             isInitialized = true;
         }
 
+        public override void LaunchTarget(Vector3 direction)
+        {
+            base.LaunchTarget(direction);
+            hitPlayer = false;
+        }
+
         private void OnTriggerEnter(Collider other)
         {
-            if (other.tag == "PlayerHitbox")
+            if (hitPlayer && other.tag == "PlayerHitbox")
             {
                 PlayerLogic playerScript = other.transform.root.GetComponent<PlayerLogic>();
                 if (playerScript)
                 {
                     playerScript.TakeDamage(damage, transform);
+                    Destroy(gameObject);
+                }
+            }
+            else if(!hitPlayer && other.tag == "EnemyHitbox")
+            {
+                EnemyBase enemy = other.transform.root.GetComponent<EnemyBase>();
+                if(enemy)
+                {
+                    enemy.TakeDamage(damage * 5.0f);
                     Destroy(gameObject);
                 }
             }

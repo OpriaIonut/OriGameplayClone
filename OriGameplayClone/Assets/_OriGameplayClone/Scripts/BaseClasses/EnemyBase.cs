@@ -30,7 +30,7 @@ namespace OriProject
 
             rb = GetComponent<Rigidbody>();
 
-            StartCoroutine("FindPlayerRange");
+            StartCoroutine(FindPlayerRange());
         }
 
         protected virtual void  BaseUpdateCall()
@@ -82,6 +82,7 @@ namespace OriProject
 
         protected virtual IEnumerator FindPlayerRange()
         {
+            WaitForSeconds wait = new WaitForSeconds(0.1f);
             while(true)
             {
                 if(Vector3.Distance(playerTransf.position, transform.position) < status.range)
@@ -94,7 +95,7 @@ namespace OriProject
                         timePlayerExitedRange = Time.time;
                     isPlayerInRange = false;
                 }
-                yield return new WaitForSeconds(0.1f);
+                yield return wait;
             }
         }
 
