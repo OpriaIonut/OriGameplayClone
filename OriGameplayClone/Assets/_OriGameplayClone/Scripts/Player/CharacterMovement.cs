@@ -101,20 +101,21 @@ namespace OriProject
             //Detect all input in update
             horizontalInput = Input.GetAxis("Horizontal");
 
-            holdingShift = Input.GetKey(KeyCode.LeftShift);
-            holdingSpace = Input.GetKey(KeyCode.Space);
-            if (Input.GetKeyUp(KeyCode.Space))
+            holdingShift = Input.GetButton("Hover");
+            holdingSpace = Input.GetButton("Jump");
+
+            if (Input.GetButtonDown("Jump"))
             {
                 canJump = true;
                 jumpTimeCounter = Time.time;
             }
-            if (Input.GetKeyDown(KeyCode.LeftControl) && canDash && Time.time - dashStartTime > dashCooldown)
+            if (Input.GetButtonDown("Dash") && canDash && Time.time - dashStartTime > dashCooldown)
             {
                 doDash = true;
                 canDash = false;
                 dashStartTime = Time.time;
                 dashDirection = horizontalInput;
-                if (dashDirection == 0.0f)
+                if (Mathf.Abs(dashDirection) - 0.1f < 0.0f)
                     dashDirection = transform.forward.x > 0.0f ? 1.0f : -1.0f;
             }
             if (doDash && Time.time - dashStartTime > dashDuration)
@@ -123,7 +124,7 @@ namespace OriProject
                 dashStartTime = Time.time;
             }
 
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetButtonDown("Bash"))
             {
                 bashChargeStarted = true;
                 bashChargeStartTime = Time.time;
@@ -133,7 +134,7 @@ namespace OriProject
                 bashParticles.Play();
                 playedBashParticles = true;
             }
-            if (bashChargeStarted && Input.GetKeyUp(KeyCode.W))
+            if (bashChargeStarted && Input.GetButtonUp("Bash"))
             {
                 bashChargeStarted = false;
                 playedBashParticles = false;
@@ -141,32 +142,49 @@ namespace OriProject
                     bashPower = bashSpeed;
             }
 
-            if (!isGrounded && Input.GetKeyDown(KeyCode.S))
+            if (!isGrounded && Input.GetAxis("Vertical") < -0.1f)
             {
                 doStomp = true;
             }
 
 
             bool focusingPropellTarget = false;
-            if (propellTargets.Count > 0 && (Input.GetMouseButton(1) || Input.GetMouseButtonUp(1)))
+            if (propellTargets.Count > 0 && (Input.GetButton("DodgeRedirect") || Input.GetButtonUp("DodgeRedirect")))
             {
                 PropellTarget propellTarget = FindNearestPropellTarget();
-                if (Input.GetMouseButton(1) && propellTarget != null)
+                if (Input.GetButton("DodgeRedirect") && propellTarget != null)
                 {
                     focusingPropellTarget = true;
                     Time.timeScale = 0.3f;
-                    Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-                    Vector3 direction = mouseWorldPos - propellTarget.targetTransf.transform.position;
+
+                    Vector3 direction;
+                    if (Input.GetMouseButton(1))
+                    {
+                        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+                        direction = mouseWorldPos - propellTarget.targetTransf.transform.position;
+                    }
+                    else
+                    {
+                        direction = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+                    }
 
                     arrowSprite.gameObject.SetActive(true);
 
                     arrowSprite.position = Camera.main.WorldToScreenPoint(propellTarget.targetTransf.transform.position);
                     arrowSprite.rotation = Quaternion.LookRotation(Vector3.forward, direction.normalized);
                 }
-                if (Input.GetMouseButtonUp(1) && propellTarget != null)
+                if (Input.GetButtonUp("DodgeRedirect") && propellTarget != null)
                 {
-                    Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-                    Vector3 direction = mouseWorldPos - propellTarget.targetTransf.transform.position;
+                    Vector3 direction;
+                    if (Input.GetMouseButtonUp(1))
+                    {
+                        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+                        direction = (mouseWorldPos - propellTarget.targetTransf.transform.position).normalized;
+                    }
+                    else
+                    {
+                        direction = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+                    }
 
                     rb.velocity = new Vector3(rb.velocity.x, 0.0f, 0.0f);
                     canDoubleJump = true;

@@ -125,5 +125,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0c2c7863da9719449f07e862f0d42dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propellForce: 12500
+  propellForce: 125000
   targetTransf: {fileID: 4212153093748561923}

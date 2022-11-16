@@ -27692,6 +27692,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3967587832571547753, guid: b55a91e800f660744b4218744e468e6f, type: 3}
+      propertyPath: m_ConnectedAnchor.z
+      value: 3.1700006
+      objectReference: {fileID: 0}
     - target: {fileID: 3967587832571547754, guid: b55a91e800f660744b4218744e468e6f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0
@@ -29453,9 +29457,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1532420404, guid: be857839962066649b5fb230df4b1326, type: 3}
+      propertyPath: dashSpeed
+      value: 1250
+      objectReference: {fileID: 0}
+    - target: {fileID: 1532420404, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: arrowSprite
       value: 
       objectReference: {fileID: 1674149285}
+    - target: {fileID: 1532420404, guid: be857839962066649b5fb230df4b1326, type: 3}
+      propertyPath: dashDuration
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 1727924977117713590, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: healthBar
       value: 
@@ -29482,11 +29494,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1727924978403786163, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -22.49
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1727924978403786163, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -37.48
+      value: 1.66
       objectReference: {fileID: 0}
     - target: {fileID: 1727924978403786163, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: m_LocalPosition.z

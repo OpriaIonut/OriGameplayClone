@@ -55,14 +55,14 @@ namespace OriProject
 
         private void AttackLogic()
         {
-            if (currentShots == shotsBeforeDelay)
+            if (currentShots >= shotsBeforeDelay)
             {
                 if (Time.time - attackRechargeTime > attackRechargeDelay)
                 {
                     currentShots = 0;
                 }
             }
-            else if (Input.GetMouseButtonDown(0))
+            else if (Input.GetButtonDown("Fire1"))
             {
                 isCharging = true;
                 chargeStartTime = Time.time;
@@ -128,12 +128,12 @@ namespace OriProject
                 }
 
                 currentShots++;
-                if (currentShots == shotsBeforeDelay)
+                if (currentShots >= shotsBeforeDelay)
                 {
                     attackRechargeTime = Time.time;
                 }
             }
-            if(Input.GetMouseButtonUp(0))
+            if(Input.GetButtonUp("Fire1"))
             {
                 if(chargeReady)
                 {

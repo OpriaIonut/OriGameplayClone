@@ -12,10 +12,11 @@ namespace OriProject
 
         public virtual void LaunchTarget(Vector3 direction)
         {
-            if (propellForce > 0.0f)
+            if (propellForce > 0.0f && Vector3.Distance(direction, Vector3.zero) > 0.01)
             {
                 Rigidbody rigidbody = targetTransf.GetComponent<Rigidbody>();
                 rigidbody.isKinematic = false;
+                rigidbody.velocity = Vector3.zero;
                 rigidbody.AddForce(direction * propellForce);
             }
         }
