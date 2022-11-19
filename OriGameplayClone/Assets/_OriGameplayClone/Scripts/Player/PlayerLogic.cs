@@ -32,10 +32,13 @@ namespace OriProject
 
         private EnemyDetector enemyDetector;
         private CharacterMovement movementScript;
+        private Animator anim;
 
         private float chargeStartTime = 0.0f;
         private bool isCharging = false;
         private bool chargeReady = false;
+
+        private bool isDead = false;
 
         private List<EnemyBase> enemiesInRange = new List<EnemyBase>();
         private List<Tuple<int, float>> enemyDistance = new List<Tuple<int, float>>();
@@ -45,6 +48,7 @@ namespace OriProject
             currentHealth = maxHealth;
             enemyDetector = GetComponentInChildren<EnemyDetector>();
             movementScript = GetComponent<CharacterMovement>();
+            anim = GetComponent<Animator>();
             enemyDetector.SetRadius(radius);
         }
 
@@ -160,6 +164,7 @@ namespace OriProject
                 Die();
             else
             {
+                anim.SetTrigger("gotHit");
                 float healthBarFill = currentHealth / maxHealth;
                 healthBar.transform.localScale = new Vector3(healthBarFill, healthBar.transform.localScale.y, healthBar.transform.localScale.z);
 
@@ -172,8 +177,13 @@ namespace OriProject
 
         private void Die()
         {
-            Debug.Log("Game Over!");
-            gameObject.SetActive(false);
+            if (isDead == false)
+            {
+                isDead = true;
+                anim.SetBool("isDead", true);
+                anim.SetTrigger("die");
+                Debug.Log("Game Over!");
+            }
         }
 
         public void EnemyDied(EnemyBase enemy)

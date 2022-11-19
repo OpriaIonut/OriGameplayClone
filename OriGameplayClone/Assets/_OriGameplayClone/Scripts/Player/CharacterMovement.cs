@@ -55,6 +55,7 @@ namespace OriProject
         [Header("PropellTargets")]
         public RectTransform arrowSprite;
 
+        private Animator anim;
         private List<PropellTarget> propellTargets = new List<PropellTarget>();
 
         private bool isGrounded = true;     //Did we hit a ground collider?
@@ -86,12 +87,14 @@ namespace OriProject
 
         private Vector3 knockbackDir;
         private float knockBackAmount;
+        private int jumpCounter = 0;
 
         private Rigidbody rb;
 
         private void Start()
         {
             rb = transform.root.GetComponent<Rigidbody>();
+            anim = GetComponent<Animator>();
 
             StartCoroutine(CheckPlatforms());
         }
@@ -101,8 +104,12 @@ namespace OriProject
             //Detect all input in update
             horizontalInput = Input.GetAxis("Horizontal");
 
+            anim.SetBool("walking", horizontalInput != 0.0f);
+
             holdingShift = Input.GetButton("Hover");
             holdingSpace = Input.GetButton("Jump");
+
+            anim.SetBool("hover", holdingShift);
 
             if (Input.GetButtonDown("Jump"))
             {
@@ -112,6 +119,7 @@ namespace OriProject
             if (Input.GetButtonDown("Dash") && canDash && Time.time - dashStartTime > dashCooldown)
             {
                 doDash = true;
+                anim.SetBool("dash", true);
                 canDash = false;
                 dashStartTime = Time.time;
                 dashDirection = horizontalInput;
@@ -121,12 +129,14 @@ namespace OriProject
             if (doDash && Time.time - dashStartTime > dashDuration)
             {
                 doDash = false;
+                anim.SetBool("dash", false);
                 dashStartTime = Time.time;
             }
 
             if (Input.GetButtonDown("Bash"))
             {
                 bashChargeStarted = true;
+                anim.SetBool("propellUpLook", true);
                 bashChargeStartTime = Time.time;
             }
             if (bashChargeStarted && isGrounded && !playedBashParticles && Time.time - bashChargeStartTime > bashChargeTime)
@@ -137,9 +147,15 @@ namespace OriProject
             if (bashChargeStarted && Input.GetButtonUp("Bash"))
             {
                 bashChargeStarted = false;
+
                 playedBashParticles = false;
                 if (isGrounded && Time.time - bashChargeStartTime > bashChargeTime)
+                {
                     bashPower = bashSpeed;
+                    anim.SetTrigger("jump");
+                }
+                anim.SetBool("propellUpLook", false);
+                anim.SetBool("isGrounded", false);
             }
 
             if (!isGrounded && Input.GetAxis("Vertical") < -0.1f)
@@ -185,6 +201,7 @@ namespace OriProject
                     {
                         direction = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
                     }
+                    anim.SetTrigger("dodgeRedirect");
 
                     rb.velocity = new Vector3(rb.velocity.x, 0.0f, 0.0f);
                     canDoubleJump = true;
@@ -223,6 +240,8 @@ namespace OriProject
                     }
 
                     isGrounded = true;
+                    anim.SetBool("isGrounded", true);
+
                     canDoubleJump = true;
                     canDash = true;
                     dodgeRedirectAmount = 0.0f;
@@ -233,6 +252,7 @@ namespace OriProject
                 else
                 {
                     isGrounded = false;
+                    anim.SetBool("isGrounded", false);
                 }
 
                 if(Physics.Raycast(wallDetector.position, wallDetector.forward, out hitInfo, detectionDistance, platformsLayer))
@@ -340,11 +360,15 @@ namespace OriProject
                     float speed = jumpSpeed;
                     float jumpCounterMax = jumpInputTime;
 
+                    jumpCounter++;
+                    string animName = jumpCounter % 3 == 0 ? "jumpVariation" : "jump";
+
                     //Based on if it is first jump or second jump, change the properties
                     if (!isGrounded && canWallJump)
                     {
                         wallJumpPropulsion = wallJumpSpeed;
                         canWallJump = false;
+                        animName = "wallClimb";
                     }
                     else if (isGrounded == false) //Second jump
                     {
@@ -352,12 +376,18 @@ namespace OriProject
                         wallJumpPropulsion = 0.0f;
                         canDoubleJump = false;
                         jumpCounterMax = 0.0f;
+
+                        jumpCounter--;
+                        animName = "secondJump";
                     }
                     else
                         isGrounded = false;
                     canJump = false;
                     bashPower = 0.0f;
                     doStomp = false;
+
+                    anim.SetTrigger(animName);
+                    anim.SetBool("isGrounded", false);
 
                     //Propell the character upwards
                     velocity.y = speed * Time.fixedDeltaTime;
