@@ -13737,6 +13737,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4212153093748561920, guid: a4bd45bdf5ed93a4d9783247de3aa2af, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 02dbe5e4fc86723488ed43d46c7cc6af, type: 2}
     - target: {fileID: 4212153093748561923, guid: a4bd45bdf5ed93a4d9783247de3aa2af, type: 3}
       propertyPath: m_RootOrder
       value: 68
@@ -29561,7 +29565,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1532420404, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: dashSpeed
-      value: 1250
+      value: 1500
       objectReference: {fileID: 0}
     - target: {fileID: 1532420404, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: arrowSprite
@@ -29570,6 +29574,10 @@ PrefabInstance:
     - target: {fileID: 1532420404, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: dashDuration
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1532420404, guid: be857839962066649b5fb230df4b1326, type: 3}
+      propertyPath: detectionDistance
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 1727924977117713590, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: healthBar
@@ -29601,11 +29609,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1727924978403786163, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.66
+      value: 1.25
       objectReference: {fileID: 0}
     - target: {fileID: 1727924978403786163, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1727924978403786163, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: m_LocalRotation.w
@@ -30123,6 +30131,10 @@ PrefabInstance:
     - target: {fileID: 8467593216761517936, guid: acb41a0b2db50874492ea7d621bc9b6f, type: 3}
       propertyPath: m_TagString
       value: GroundPlatform
+      objectReference: {fileID: 0}
+    - target: {fileID: 8594897854672781698, guid: acb41a0b2db50874492ea7d621bc9b6f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.0025
       objectReference: {fileID: 0}
     - target: {fileID: 8797749235986971185, guid: acb41a0b2db50874492ea7d621bc9b6f, type: 3}
       propertyPath: m_TagString

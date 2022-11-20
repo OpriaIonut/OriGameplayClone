@@ -154,8 +154,7 @@ namespace OriProject
                     bashPower = bashSpeed;
                     anim.SetTrigger("jump");
                 }
-                anim.SetBool("propellUpLook", false);
-                anim.SetBool("isGrounded", false);
+                StartCoroutine(SetAnimBool("propellUpLook", false, 0.1f));
             }
 
             if (!isGrounded && Input.GetAxis("Vertical") < -0.1f)
@@ -225,13 +224,21 @@ namespace OriProject
             MovementLogic();
         }
 
+        private IEnumerator SetAnimBool(string prop, bool value, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            anim.SetBool(prop, value);
+        }
+
         private IEnumerator CheckPlatforms()
         {
+            WaitForSeconds waitTime = new WaitForSeconds(0.1f);
             while(true)
             {
-                yield return null;
+                yield return waitTime;
 
                 RaycastHit hitInfo;
+                Debug.DrawLine(floorDetector.position, floorDetector.position + Vector3.down * detectionDistance, Color.red, 0.1f);
                 if (Physics.Raycast(floorDetector.position, Vector3.down, out hitInfo, detectionDistance, platformsLayer))
                 {
                     if (doStomp && hitInfo.collider.tag == "BreakablePlatform")
@@ -240,7 +247,6 @@ namespace OriProject
                     }
 
                     isGrounded = true;
-                    anim.SetBool("isGrounded", true);
 
                     canDoubleJump = true;
                     canDash = true;
@@ -252,10 +258,11 @@ namespace OriProject
                 else
                 {
                     isGrounded = false;
-                    anim.SetBool("isGrounded", false);
                 }
 
-                if(Physics.Raycast(wallDetector.position, wallDetector.forward, out hitInfo, detectionDistance, platformsLayer))
+                anim.SetBool("isGrounded", isGrounded);
+
+                if (Physics.Raycast(wallDetector.position, wallDetector.forward, out hitInfo, detectionDistance, platformsLayer))
                 {
                     canWallJump = true;
                     canDoubleJump = true;
@@ -313,7 +320,7 @@ namespace OriProject
             Vector3 velocity = rb.velocity;
 
             float currentMoveDir = horizontalInput > 0.0f ? 1.0f : -1.0f;
-            if (velocity.x != 0.0f)
+            if (Mathf.Abs(velocity.x) > 0.1f)
             {
                 //Rotate player to face move direction
                 float rotAngle = velocity.x > 0.0f ? 90.0f : -90.0f;
@@ -334,7 +341,7 @@ namespace OriProject
             xVel += wallJumpPropulsion * wallDirection;
 
             if (doDash)
-                xVel += dashDirection * dashSpeed;
+                xVel = dashDirection * dashSpeed;
 
             velocity = new Vector3(xVel * Time.fixedDeltaTime, velocity.y, velocity.z) + dodgeRedirectDirection * dodgeRedirectAmount * Time.fixedDeltaTime + knockbackDir * knockBackAmount * Time.fixedDeltaTime;
 
