@@ -45,6 +45,10 @@ namespace OriProject
                         horizontalAmount = -horizontalPropellLimit;
                 }
 
+
+                float rotAngle = horizontalAmount > 0.0f ? 0.0f : 180.0f;
+                transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, rotAngle, transform.rotation.eulerAngles.z);
+
                 Vector3 propelDir = new Vector3(horizontalAmount, upwardsPropell, 0.0f);
                 rb.AddForce(propelDir);
             }
