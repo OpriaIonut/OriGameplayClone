@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace OriProject
@@ -12,15 +13,33 @@ namespace OriProject
 
         private float mapWidth = 250.0f;
         private float markerMaxRadius = 0;
-        private EnemyColony[] enemyCells;
+        private List<EnemyColony> enemyCells;
         private List<RectTransform> enemyMarkers;
+
+        #region Singleton
+
+        private static Minimap instance;
+        public static Minimap Instance { get { return instance; } }
+
+        private void Awake()
+        {
+            if (instance != null)
+            {
+                Debug.LogWarning("Multiple instances for Minimap. Removing from " + gameObject.name);
+                Destroy(this);
+            }
+            else
+                instance = this;
+        }
+
+        #endregion
 
         private void Start()
         {
-            enemyCells = FindObjectsOfType<EnemyColony>();
+            enemyCells = FindObjectsOfType<EnemyColony>().ToList();
 
             enemyMarkers = new List<RectTransform>();
-            for(int index = 0; index < enemyCells.Length; index++)
+            for(int index = 0; index < enemyCells.Count; index++)
             {
                 GameObject clone = Instantiate(enemyMarkerPrefab, enemyMarkerParent);
                 clone.name = enemyCells[index].name;
@@ -31,7 +50,7 @@ namespace OriProject
 
         private void Update()
         {
-            for(int index = 0; index < enemyCells.Length; index++)
+            for(int index = 0; index < enemyCells.Count; index++)
             {
                 Vector3 screenPos = minimapCam.WorldToScreenPoint(enemyCells[index].transform.position);
                 screenPos.z = 0.0f;
@@ -48,6 +67,34 @@ namespace OriProject
                     markerPos = screenPos.normalized * markerMaxRadius;
                 
                 enemyMarkers[index].localPosition = markerPos;
+            }
+        }
+
+        public void ColonyDeath(EnemyColony obj, EnemyColony spawnedChild1, EnemyColony spawnedChild2)
+        {
+            for(int index = 0; index < enemyCells.Count; index++)
+            {
+                if(enemyCells[index] == obj)
+                {
+                    enemyCells.RemoveAt(index);
+                    Destroy(enemyMarkers[index].gameObject);
+                    enemyMarkers.RemoveAt(index);
+                    break;
+                }
+            }
+            if(spawnedChild1 != null)
+            {
+                enemyCells.Add(spawnedChild1);
+                GameObject clone = Instantiate(enemyMarkerPrefab, enemyMarkerParent);
+                clone.name = spawnedChild1.name;
+                enemyMarkers.Add(clone.GetComponent<RectTransform>());
+            }
+            if (spawnedChild2 != null)
+            {
+                enemyCells.Add(spawnedChild2);
+                GameObject clone = Instantiate(enemyMarkerPrefab, enemyMarkerParent);
+                clone.name = spawnedChild2.name;
+                enemyMarkers.Add(clone.GetComponent<RectTransform>());
             }
         }
     }

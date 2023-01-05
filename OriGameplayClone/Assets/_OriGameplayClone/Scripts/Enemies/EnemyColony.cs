@@ -46,19 +46,24 @@ namespace OriProject
 
         protected override void Die()
         {
+            EnemyColony script = null;
+            EnemyColony script2 = null;
             if(spawnChildOnDeath)
             {
                 GameObject clone1 = Instantiate(child);
+                clone1.name = gameObject.name;
                 clone1.transform.position = transform.position;
-                EnemyColony script = clone1.GetComponent<EnemyColony>();
+                script = clone1.GetComponent<EnemyColony>();
                 script.OnSpawned(true);
 
                 GameObject clone2 = Instantiate(child);
+                clone2.name = gameObject.name;
                 clone2.transform.position = transform.position;
-                EnemyColony script2 = clone2.GetComponent<EnemyColony>();
+                script2 = clone2.GetComponent<EnemyColony>();
                 script2.OnSpawned(false);
             }
 
+            Minimap.Instance.ColonyDeath(this, script, script2);
             Destroy(gameObject);
         }
 
