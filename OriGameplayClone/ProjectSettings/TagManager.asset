@@ -23,7 +23,7 @@ TagManager:
   - LaserRaycast
   - MapPlatforms
   - PostProcessing
-  - 
+  - NoMinimapDisplay
   - 
   - 
   - 

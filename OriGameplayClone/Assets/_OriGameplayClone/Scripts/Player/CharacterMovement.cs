@@ -51,9 +51,11 @@ namespace OriProject
         [Header("Stomp")]
         public float stompSpeed = 25.0f;
         public float stompGravityLimiter = 25.0f;
+        public ParticleSystem stompParticles;
 
         [Header("PropellTargets")]
         public RectTransform arrowSprite;
+        public GameObject[] dashLines;
 
         private Animator anim;
         private List<PropellTarget> propellTargets = new List<PropellTarget>();
@@ -119,6 +121,12 @@ namespace OriProject
             if (Input.GetButtonDown("Dash") && canDash && Time.time - dashStartTime > dashCooldown)
             {
                 doDash = true;
+
+                for(int index = 0; index < dashLines.Length; index++)
+                {
+                    dashLines[index].SetActive(true);
+                }
+
                 anim.SetBool("dash", true);
                 canDash = false;
                 dashStartTime = Time.time;
@@ -131,6 +139,8 @@ namespace OriProject
                 doDash = false;
                 anim.SetBool("dash", false);
                 dashStartTime = Time.time;
+
+                StartCoroutine(StopDashLines());
             }
 
             if (Input.GetButtonDown("Bash"))
@@ -244,6 +254,11 @@ namespace OriProject
                     if (doStomp && hitInfo.collider.tag == "BreakablePlatform")
                     {
                         hitInfo.collider.gameObject.SetActive(false);
+                    }
+
+                    if(doStomp)
+                    {
+                        stompParticles.Play();
                     }
 
                     isGrounded = true;
@@ -423,6 +438,15 @@ namespace OriProject
                 rb.velocity = new Vector3(rb.velocity.x, Mathf.Clamp(velocity.y, -stompGravityLimiter, float.MaxValue), 0.0f);
             else if (!isGrounded && holdingShift)
                 rb.velocity = new Vector3(rb.velocity.x, Mathf.Clamp(velocity.y, -hoverGravityLimiter, float.MaxValue), 0.0f);
+        }
+
+        private IEnumerator StopDashLines()
+        {
+            yield return new WaitForSeconds(0.25f);
+            for(int index = 0; index < dashLines.Length; index++)
+            {
+                dashLines[index].SetActive(false);
+            }
         }
     }
 }

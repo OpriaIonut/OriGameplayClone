@@ -11,6 +11,7 @@ namespace OriProject
         public Transform laserRay;
         public LayerMask laserLayer;
         public LayerMask obstacleLayer;
+        public ParticleSystem chargingParticles;
 
         public bool horizontalLaser;
         public float fireDuration = 5.0f;
@@ -21,6 +22,9 @@ namespace OriProject
 
         private void Start()
         {
+            ParticleSystem.MainModule main = chargingParticles.main;
+            main.duration = fireCooldown - fireCooldown * 0.2f;
+
             StartCoroutine(FireLaser());
         }
 
@@ -66,6 +70,7 @@ namespace OriProject
                 }
                 laserRay.gameObject.SetActive(false);
 
+                chargingParticles.Play();
                 yield return new WaitForSeconds(fireCooldown);
             }
         }
