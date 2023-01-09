@@ -9,7 +9,8 @@ namespace OriProject
     public class PlayerLogic : MonoBehaviour
     {
         public float maxHealth;
-        public Image healthBar; 
+        public Image healthBar;
+        public GameObject savePopupText;
 
         [Header("Attack")]
         public float damage;
@@ -39,9 +40,13 @@ namespace OriProject
         private bool chargeReady = false;
 
         private bool isDead = false;
+        private bool checkpointInRange = false;
+        private Checkpoint focusedCheckpoint;
 
         private List<EnemyBase> enemiesInRange = new List<EnemyBase>();
         private List<Tuple<int, float>> enemyDistance = new List<Tuple<int, float>>();
+
+        public float GetCurrentHealth() { return currentHealth; }
 
         private void Start()
         {
@@ -54,6 +59,12 @@ namespace OriProject
 
         private void Update()
         {
+            if(checkpointInRange && Input.GetKeyDown(KeyCode.E))
+            {
+                SceneSaver.SaveGameData();
+                focusedCheckpoint.ChangeParticleDisplay();
+            }
+
             AttackLogic();
         }
 
@@ -157,21 +168,24 @@ namespace OriProject
             }
         }
 
-        public void TakeDamage(float damage, Transform attackerTransf)
+        public void TakeDamage(float damage, Transform attackerTransf, bool addKnockback = true)
         {
             currentHealth -= damage;
             if (currentHealth <= 0.0f)
                 Die();
             else
             {
-                anim.SetTrigger("gotHit");
                 float healthBarFill = currentHealth / maxHealth;
                 healthBar.transform.localScale = new Vector3(healthBarFill, healthBar.transform.localScale.y, healthBar.transform.localScale.z);
 
-                Vector3 direction = (transform.position - attackerTransf.position).normalized;
-                direction.y = 0.0f;
-                direction.z = 0.0f;
-                movementScript.AddKnockback(direction);
+                if (addKnockback)
+                {
+                    anim.SetTrigger("gotHit");
+                    Vector3 direction = (transform.position - attackerTransf.position).normalized;
+                    direction.y = 0.0f;
+                    direction.z = 0.0f;
+                    movementScript.AddKnockback(direction);
+                }
             }
         }
 
@@ -207,6 +221,13 @@ namespace OriProject
                 enemiesInRange.Remove(enemy);
                 enemy.IsInPlayerRange(false);
             }
+        }
+
+        public void CheckpointInRange(bool value, Checkpoint checkpointCollider)
+        {
+            checkpointInRange = value;
+            focusedCheckpoint = checkpointCollider;
+            savePopupText.SetActive(value);
         }
     }
 }

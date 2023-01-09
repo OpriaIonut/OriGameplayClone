@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_OriGameplayClone/Scene/WalkingScene.unity
+    path: Assets/_OriGameplayClone/Scene/MainMenu.unity
+    guid: db0fcb5ef64cca3489b431287f7f1d9c
+  - enabled: 1
+    path: Assets/_OriGameplayClone/Scene/GameScene.unity
     guid: dcec4e3fcf29c064cb7d4959c4d60d14
   m_configObjects: {}

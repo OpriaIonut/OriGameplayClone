@@ -11,6 +11,7 @@ TagManager:
   - EnemyHitbox
   - PropellTarget
   - UnclimbableWall
+  - Checkpoint
   layers:
   - Default
   - TransparentFX

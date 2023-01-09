@@ -7,6 +7,9 @@ namespace OriProject
 {
     public class EnemyBase : PropellTarget
     {
+        public static int counter = 0;
+
+        public string name;
         public float speed;
         public EnemyScriptable status;
         public GameObject inPlayerRangeGfx;
@@ -21,8 +24,13 @@ namespace OriProject
         private float currentHealth;
         protected float lastAttackTime = 0.0f;
 
+        public float maxHealth { get { return status.health; } }
+        public float GetCurrentHealth() { return currentHealth; }
+
         protected virtual void BaseStartCall()
         {
+            counter++;
+            name = "Enemy" + counter;
             currentHealth = status.health;
 
             healthBar.transform.parent.gameObject.SetActive(false);

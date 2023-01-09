@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2780713366331278831}
   - component: {fileID: 2780713366331278830}
+  - component: {fileID: 7812282946759661626}
   m_Layer: 0
   m_Name: Checkpoint
-  m_TagString: Untagged
+  m_TagString: Checkpoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,6 +48,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalParticle: {fileID: 797606453361996505}
   savedParticle: {fileID: 797606451970914408}
+--- !u!65 &7812282946759661626
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2780713366331278828}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 2.2256775, z: 1}
+  m_Center: {x: 0, y: 1.0516624, z: 0}
 --- !u!1001 &2780713365481044885
 PrefabInstance:
   m_ObjectHideFlags: 0

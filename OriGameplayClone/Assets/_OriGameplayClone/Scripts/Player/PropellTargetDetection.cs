@@ -7,10 +7,12 @@ namespace OriProject
     public class PropellTargetDetection : MonoBehaviour
     {
         private CharacterMovement playerScript;
+        private PlayerLogic playerLogic;
 
         private void Start()
         {
             playerScript = transform.root.GetComponent<CharacterMovement>();
+            playerLogic = transform.root.GetComponent<PlayerLogic>();
         }
 
         private void OnTriggerEnter(Collider other)

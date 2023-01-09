@@ -9,38 +9,39 @@ namespace OriProject
         public ParticleSystem normalParticle;
         public ParticleSystem savedParticle;
 
-        private Transform playerTransf;
-
-        private void Start()
+        private bool changedParticles = false;
+        public void ChangeParticleDisplay()
         {
-            playerTransf = FindObjectOfType<PlayerLogic>().transform;
-            StartCoroutine(CustomUpdate());
+            normalParticle.gameObject.SetActive(false);
+            savedParticle.gameObject.SetActive(true);
+            savedParticle.Play();
+
+            changedParticles = true;
+            FindObjectOfType<PlayerLogic>().CheckpointInRange(false, null);
         }
 
-        private IEnumerator CustomUpdate()
+        private void OnTriggerEnter(Collider other)
         {
-            while(true)
+            if (changedParticles == false && other.name == "GFX")
             {
-                if(Vector3.Distance(playerTransf.position, transform.position) < 1.5f)
+                PlayerLogic target = other.transform.root.GetComponent<PlayerLogic>();
+                if (target)
                 {
-                    yield return new WaitForSeconds(3.0f);
-
-                    if(Vector3.Distance(playerTransf.position, transform.position) < 1.5f)
-                    {
-                        SaveGame();
-                        normalParticle.gameObject.SetActive(false);
-                        savedParticle.gameObject.SetActive(true);
-                        savedParticle.Play();
-                        break;
-                    }
+                    target.CheckpointInRange(true, this);
                 }
-                yield return new WaitForSeconds(0.1f);
             }
         }
 
-        private void SaveGame()
+        private void OnTriggerExit(Collider other)
         {
-
+            if (changedParticles == false && other.name == "GFX")
+            {
+                PlayerLogic target = other.transform.root.GetComponent<PlayerLogic>();
+                if (target)
+                {
+                    target.CheckpointInRange(false, null);
+                }
+            }
         }
     }
 }
