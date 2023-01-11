@@ -61,8 +61,8 @@ namespace OriProject
         {
             if(checkpointInRange && Input.GetKeyDown(KeyCode.E))
             {
-                SceneSaver.SaveGameData();
                 focusedCheckpoint.ChangeParticleDisplay();
+                SceneSaver.SaveGameData();
             }
 
             AttackLogic();
@@ -196,7 +196,10 @@ namespace OriProject
                 isDead = true;
                 anim.SetBool("isDead", true);
                 anim.SetTrigger("die");
-                Debug.Log("Game Over!");
+
+                UIManager ui = FindObjectOfType<UIManager>();
+                ui.ShowPopup(false);
+                Time.timeScale = 0.0f;
             }
         }
 

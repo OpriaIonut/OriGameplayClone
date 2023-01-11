@@ -9,7 +9,18 @@ namespace OriProject
         public ParticleSystem normalParticle;
         public ParticleSystem savedParticle;
 
+        public string name = "";
+        private static int counter = 0;
+
         private bool changedParticles = false;
+        public bool wasUsed { get { return changedParticles; } }
+
+        private void Start()
+        {
+            name = "Checkpoint" + counter;
+            counter++;
+        }
+
         public void ChangeParticleDisplay()
         {
             normalParticle.gameObject.SetActive(false);

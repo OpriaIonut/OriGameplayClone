@@ -50,6 +50,17 @@ namespace OriProject
                         enemies[index].transform.rotation = new Quaternion(float.Parse(items[4]), float.Parse(items[5]), float.Parse(items[6]), float.Parse(items[7]));
                     }
                 }
+
+                Checkpoint[] checkpoints = FindObjectsOfType<Checkpoint>();
+                for (int index = 0; index < checkpoints.Length; index++)
+                {
+                    if (PlayerPrefs.HasKey(checkpoints[index].name))
+                    {
+                        string value = PlayerPrefs.GetString(checkpoints[index].name);
+                        if (value == "True")
+                            checkpoints[index].ChangeParticleDisplay();
+                    }
+                }
             }
         }
 
@@ -69,6 +80,12 @@ namespace OriProject
             string playerData = "" + playerScript.GetCurrentHealth() + "_" + playerScript.transform.position.x + "_" + playerScript.transform.position.y + "_" + playerScript.transform.position.z + "_" + playerScript.transform.rotation.x + "_" + playerScript.transform.rotation.y + "_" + playerScript.transform.rotation.z + "_" + playerScript.transform.rotation.w;
 
             PlayerPrefs.SetString("Player", playerData);
+
+            Checkpoint[] checkpoints = FindObjectsOfType<Checkpoint>();
+            for(int index = 0; index < checkpoints.Length; index++)
+            {
+                PlayerPrefs.SetString(checkpoints[index].name, "" + checkpoints[index].wasUsed);
+            }
 
             PlayerPrefs.Save();
         }
