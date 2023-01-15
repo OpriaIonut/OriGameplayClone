@@ -10,7 +10,6 @@ namespace OriProject
         private void Start()
         {
             PlayerPrefs.DeleteAll();
-            SceneManager.LoadScene("GameScene");
         }
 
         public void StartGame()

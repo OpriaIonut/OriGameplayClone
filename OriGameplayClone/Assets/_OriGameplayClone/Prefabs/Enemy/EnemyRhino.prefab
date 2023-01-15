@@ -363,10 +363,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propellForce: 1000
   targetTransf: {fileID: 4821423007667535302}
+  name: 
   speed: 10
   status: {fileID: 11400000, guid: 8ceb8f25f0dcb304199985e237bf27db, type: 2}
   inPlayerRangeGfx: {fileID: 4821423007406170406}
   healthBar: {fileID: 4821423008771542027}
+  enemyDetectTransf: {fileID: 6221941034652371967}
   wallDetector: {fileID: 7020023825756954058}
   detectionDistance: 0.5
   platformsLayer:
@@ -597,5 +599,10 @@ PrefabInstance:
 --- !u!4 &7600384794958280121 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d38a8518e77c3884e822c713fa04b8d1, type: 3}
+  m_PrefabInstance: {fileID: 7994809417977156178}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6221941034652371967 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4083501151425157549, guid: d38a8518e77c3884e822c713fa04b8d1, type: 3}
   m_PrefabInstance: {fileID: 7994809417977156178}
   m_PrefabAsset: {fileID: 0}

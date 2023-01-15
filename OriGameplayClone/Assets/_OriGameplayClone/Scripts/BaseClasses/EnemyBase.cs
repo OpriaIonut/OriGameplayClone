@@ -7,13 +7,11 @@ namespace OriProject
 {
     public class EnemyBase : PropellTarget
     {
-        public static int counter = 0;
-
-        public string name;
         public float speed;
         public EnemyScriptable status;
         public GameObject inPlayerRangeGfx;
         public Image healthBar;
+        public Transform enemyDetectTransf;
 
         protected Transform playerTransf;
         protected Rigidbody rb;
@@ -29,8 +27,6 @@ namespace OriProject
 
         protected virtual void BaseStartCall()
         {
-            counter++;
-            name = "Enemy" + counter;
             currentHealth = status.health;
 
             healthBar.transform.parent.gameObject.SetActive(false);
@@ -99,7 +95,10 @@ namespace OriProject
                 if (UIManager.Instance.GamePaused)
                     yield break;
 
-                if (Vector3.Distance(playerTransf.position, transform.position) < status.range)
+                Vector3 dir = (playerTransf.position - enemyDetectTransf.position).normalized;
+                float playerDist = Vector3.Distance(playerTransf.position, enemyDetectTransf.position);
+
+                if (playerDist < status.range && !Physics.Raycast(enemyDetectTransf.position, dir, playerDist, LayerMask.GetMask("MapPlatforms")))
                 {
                     isPlayerInRange = true;
                 }

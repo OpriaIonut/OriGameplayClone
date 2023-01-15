@@ -66,7 +66,10 @@ namespace OriProject
                 if (UIManager.Instance.GamePaused)
                     yield break;
 
-                if (Vector3.Distance(playerTransf.position, transform.position) < status.range)
+                Vector3 dir = (playerTransf.position - enemyDetectTransf.position).normalized;
+                float playerDist = Vector3.Distance(playerTransf.position, enemyDetectTransf.position);
+
+                if (playerDist < status.range && !Physics.Raycast(enemyDetectTransf.position, dir, playerDist, LayerMask.GetMask("MapPlatforms")))
                 {
                     isPlayerInRange = true;
                     if (!startedMovement && Time.time - movementEndTime > status.attackCooldown)

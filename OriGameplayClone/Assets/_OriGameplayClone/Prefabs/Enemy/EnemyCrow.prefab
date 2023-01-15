@@ -493,10 +493,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propellForce: 500
   targetTransf: {fileID: 6952067209927663727}
+  name: 
   speed: 750
   status: {fileID: 11400000, guid: 3a58918134adb88469a97d5456c2c17e, type: 2}
   inPlayerRangeGfx: {fileID: 6952067209583475855}
   healthBar: {fileID: 6952067210897723810}
+  enemyDetectTransf: {fileID: 6952067209927663727}
   moveDelay: 3
   moveDistance: 25
   moveBackSpeed: 5

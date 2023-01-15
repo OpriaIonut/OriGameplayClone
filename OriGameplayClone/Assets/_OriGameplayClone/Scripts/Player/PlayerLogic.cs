@@ -231,6 +231,15 @@ namespace OriProject
             }
         }
 
+        public void CheckEnemyInRange(EnemyBase enemy)
+        {
+            if(enemy != null && !enemiesInRange.Contains(enemy) && Vector3.Distance(enemy.transform.position, transform.position) < radius)
+            {
+                enemiesInRange.Add(enemy);
+                enemy.IsInPlayerRange(true);
+            }
+        }
+
         public void RemoveEnemyInRange(EnemyBase enemy)
         {
             if (enemy != null && enemiesInRange.Contains(enemy))

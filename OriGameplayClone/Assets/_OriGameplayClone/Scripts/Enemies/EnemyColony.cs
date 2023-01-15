@@ -47,6 +47,12 @@ namespace OriProject
             rb.AddForce(Vector3.up * 350f * upRandom + onStartRightForce * Vector3.right * 100f * rightRandom);
         }
 
+        public void KillCompletely()
+        {
+            Minimap.Instance.ColonyDeath(this, null, null);
+            Destroy(gameObject);
+        }
+
         protected override void Die()
         {
             EnemyColony script = null;
@@ -64,6 +70,10 @@ namespace OriProject
                 clone2.transform.position = transform.position;
                 script2 = clone2.GetComponent<EnemyColony>();
                 script2.OnSpawned(false);
+
+                PlayerLogic playerScript = playerTransf.GetComponent<PlayerLogic>();
+                playerScript.CheckEnemyInRange(script);
+                playerScript.CheckEnemyInRange(script2);
             }
 
             Minimap.Instance.ColonyDeath(this, script, script2);
@@ -106,12 +116,13 @@ namespace OriProject
 
                 if (UIManager.Instance.GamePaused)
                     yield break;
-
+                
                 RaycastHit hitInfo;
                 if (Physics.Raycast(floorDetector.position, Vector3.down, out hitInfo, detectionDistance, platformsLayer))
                 {
+                    if(isGrounded == false)
+                        groundHitTime = Time.time;
                     isGrounded = true;
-                    groundHitTime = Time.time;
                     rb.velocity = Vector3.zero;
                 }
                 else

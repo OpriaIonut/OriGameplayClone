@@ -240,10 +240,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propellForce: 0
   targetTransf: {fileID: 778895804942624725}
+  name: 
   speed: 2
   status: {fileID: 11400000, guid: 47332ef23c9bdfd43a02cf2cad54c1ac, type: 2}
   inPlayerRangeGfx: {fileID: 778895804715350837}
   healthBar: {fileID: 778895806055290392}
+  enemyDetectTransf: {fileID: 778895804942624725}
   waypointTransf1: {fileID: 1577943205}
   waypointTransf2: {fileID: 686354461}
   bulletPrefab: {fileID: 172062730232192988, guid: c95ea8e5afc2a85439f67a2488c1311b, type: 3}

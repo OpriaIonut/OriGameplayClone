@@ -16,6 +16,8 @@ namespace OriProject
         private List<EnemyColony> enemyCells;
         private List<RectTransform> enemyMarkers;
 
+        private bool finishedInitialization = false;
+
         #region Singleton
 
         private static Minimap instance;
@@ -37,6 +39,7 @@ namespace OriProject
         private void Start()
         {
             enemyCells = FindObjectsOfType<EnemyColony>().ToList();
+            finishedInitialization = true;
 
             enemyMarkers = new List<RectTransform>();
             for(int index = 0; index < enemyCells.Count; index++)
@@ -100,7 +103,7 @@ namespace OriProject
                 enemyMarkers.Add(clone.GetComponent<RectTransform>());
             }
 
-            if (enemyMarkers.Count == 0)
+            if (finishedInitialization && enemyMarkers.Count == 0)
                 UIManager.Instance.ShowPopup(true);
         }
     }

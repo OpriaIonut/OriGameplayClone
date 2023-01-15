@@ -36,11 +36,19 @@ namespace OriProject
                 EnemyBase[] enemies = FindObjectsOfType<EnemyBase>();
                 for(int index = 0; index < enemies.Length; index++)
                 {
-                    if (!PlayerPrefs.HasKey(enemies[index].name))
-                        enemies[index].TakeDamage(1000);
+                    if (!PlayerPrefs.HasKey(enemies[index].gameObject.name))
+                    {
+                        if (enemies[index].GetType() == typeof(EnemyColony))
+                        {
+                            EnemyColony script = (EnemyColony)enemies[index];
+                            script.KillCompletely();
+                        }
+                        else
+                            enemies[index].TakeDamage(1000);
+                    }
                     else
                     {
-                        data = PlayerPrefs.GetString(enemies[index].name);
+                        data = PlayerPrefs.GetString(enemies[index].gameObject.name);
                         items = data.Split('_');
 
                         damage = enemies[index].maxHealth - float.Parse(items[0]);
@@ -54,9 +62,9 @@ namespace OriProject
                 Checkpoint[] checkpoints = FindObjectsOfType<Checkpoint>();
                 for (int index = 0; index < checkpoints.Length; index++)
                 {
-                    if (PlayerPrefs.HasKey(checkpoints[index].name))
+                    if (PlayerPrefs.HasKey(checkpoints[index].gameObject.name))
                     {
-                        string value = PlayerPrefs.GetString(checkpoints[index].name);
+                        string value = PlayerPrefs.GetString(checkpoints[index].gameObject.name);
                         if (value == "True")
                             checkpoints[index].ChangeParticleDisplay();
                     }
@@ -73,7 +81,7 @@ namespace OriProject
             {
                 string data = "" + enemies[index].GetCurrentHealth() + "_" + enemies[index].transform.position.x + "_" + enemies[index].transform.position.y + "_" + enemies[index].transform.position.z + "_" + enemies[index].transform.rotation.x + "_" + enemies[index].transform.rotation.y + "_" + enemies[index].transform.rotation.z + "_" + enemies[index].transform.rotation.w;
 
-                PlayerPrefs.SetString(enemies[index].name, data);
+                PlayerPrefs.SetString(enemies[index].gameObject.name, data);
             }
 
             PlayerLogic playerScript = FindObjectOfType<PlayerLogic>();
@@ -84,7 +92,7 @@ namespace OriProject
             Checkpoint[] checkpoints = FindObjectsOfType<Checkpoint>();
             for(int index = 0; index < checkpoints.Length; index++)
             {
-                PlayerPrefs.SetString(checkpoints[index].name, "" + checkpoints[index].wasUsed);
+                PlayerPrefs.SetString(checkpoints[index].gameObject.name, "" + checkpoints[index].wasUsed);
             }
 
             PlayerPrefs.Save();

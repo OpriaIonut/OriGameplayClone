@@ -237,10 +237,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propellForce: 750
   targetTransf: {fileID: 899184874878501151}
+  name: 
   speed: 250
   status: {fileID: 11400000, guid: e18217007f0a2a8448b2bc2cf480150e, type: 2}
   inPlayerRangeGfx: {fileID: 899184875043264458}
   healthBar: {fileID: 899184875526143026}
+  enemyDetectTransf: {fileID: 899184874878501151}
   floorDetector: {fileID: 59331292748477787}
   detectionDistance: 0.15
   platformsLayer:

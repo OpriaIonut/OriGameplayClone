@@ -559,10 +559,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propellForce: 350
   targetTransf: {fileID: 3967587832571547754}
+  name: 
   speed: 0
   status: {fileID: 11400000, guid: c06efac31e0abc041ab6f5fafdc869ff, type: 2}
   inPlayerRangeGfx: {fileID: 3967587833342168065}
   healthBar: {fileID: 3967587832855741255}
+  enemyDetectTransf: {fileID: 3496215399008541211}
   gfx: {fileID: 3967587832571547754}
   bulletPrefab: {fileID: 2157586839432437504, guid: 73245e1604cb21b4aa1de28733ff0bf7, type: 3}
 --- !u!1001 &3967587832487935472

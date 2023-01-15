@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1481333647474241836}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.6, z: 0}
+  m_LocalPosition: {x: 0, y: -0.55, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8224023836426724332}
@@ -263,10 +263,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propellForce: 15
   targetTransf: {fileID: 8224023836426724332}
+  name: 
   speed: 150
   status: {fileID: 11400000, guid: 3daea56438f37bf438500a6ed68f38d7, type: 2}
   inPlayerRangeGfx: {fileID: 8224023836725441849}
   healthBar: {fileID: 8224023836268781249}
+  enemyDetectTransf: {fileID: 8224023836426724332}
   floorDetector: {fileID: 7698920824290812563}
   detectionDistance: 0.15
   platformsLayer:

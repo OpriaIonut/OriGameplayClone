@@ -111,10 +111,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propellForce: 750
   targetTransf: {fileID: 2848395568157222528}
+  name: 
   speed: 250
   status: {fileID: 11400000, guid: f4ad8881ad4f5594b80f2da798280b53, type: 2}
   inPlayerRangeGfx: {fileID: 2848395568436410976}
   healthBar: {fileID: 2848395569261238093}
+  enemyDetectTransf: {fileID: 5920779049004534626}
   moveDelay: 3
   waypointTransf1: {fileID: 3263061572807213552}
   waypointTransf2: {fileID: 3263061572440011080}
@@ -669,13 +671,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b7784ea5f8f7d74fa884e2a9a75fb57, type: 3}
---- !u!4 &3081025419274495934 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0b7784ea5f8f7d74fa884e2a9a75fb57, type: 3}
-  m_PrefabInstance: {fileID: 3263061571700736085}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2416692369400167684 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0b7784ea5f8f7d74fa884e2a9a75fb57, type: 3}
+  m_PrefabInstance: {fileID: 3263061571700736085}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5920779049004534626 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9179017853419834167, guid: 0b7784ea5f8f7d74fa884e2a9a75fb57, type: 3}
+  m_PrefabInstance: {fileID: 3263061571700736085}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3081025419274495934 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0b7784ea5f8f7d74fa884e2a9a75fb57, type: 3}
   m_PrefabInstance: {fileID: 3263061571700736085}
   m_PrefabAsset: {fileID: 0}

@@ -45,6 +45,8 @@ namespace OriProject
         public void RestartClick()
         {
             PlayerPrefs.DeleteAll();
+            PlayerPrefs.Save();
+
             SceneManager.LoadScene("GameScene");
         }
     }
