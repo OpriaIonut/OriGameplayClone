@@ -18,6 +18,9 @@ namespace OriProject
 
         private void FixedUpdate()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             transform.position = Vector3.Lerp(transform.position, target.position + offset, Time.fixedDeltaTime * speed);
         }
     }

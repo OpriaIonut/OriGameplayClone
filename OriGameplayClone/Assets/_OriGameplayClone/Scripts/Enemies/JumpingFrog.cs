@@ -25,11 +25,17 @@ namespace OriProject
 
         private void Update()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             BaseUpdateCall();
         }
 
         protected override void MovementLogic()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             if (isPlayerInRange && isGrounded && Time.time - reachedGroundTime > delayBetweenJumps)
             {
                 isGrounded = false;
@@ -64,6 +70,9 @@ namespace OriProject
             WaitForSeconds wait = new WaitForSeconds(0.25f);
             while (true)
             {
+                if (UIManager.Instance.GamePaused)
+                    yield break;
+
                 yield return wait;
 
                 RaycastHit hitInfo;
@@ -85,6 +94,9 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             this.OnTriggerEnterBase(other);
         }
     }

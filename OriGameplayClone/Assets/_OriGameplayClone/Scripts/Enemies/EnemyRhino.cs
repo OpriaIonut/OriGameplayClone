@@ -28,6 +28,9 @@ namespace OriProject
 
         private void Update()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             BaseUpdateCall();
         }
 
@@ -38,7 +41,10 @@ namespace OriProject
 
         protected override void MovementLogic()
         {
-            if(startedMovement && Time.time - movementEndTime > status.attackCooldown)
+            if (UIManager.Instance.GamePaused)
+                return;
+
+            if (startedMovement && Time.time - movementEndTime > status.attackCooldown)
             {
                 transform.position += Vector3.right * horizontalMoveDir * speed * Time.deltaTime;
 
@@ -57,6 +63,9 @@ namespace OriProject
         {
             while (true)
             {
+                if (UIManager.Instance.GamePaused)
+                    yield break;
+
                 if (Vector3.Distance(playerTransf.position, transform.position) < status.range)
                 {
                     isPlayerInRange = true;
@@ -84,6 +93,9 @@ namespace OriProject
 
         private void CheckPlatforms()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             RaycastHit hitInfo;
             if (Physics.Raycast(wallDetector.position, wallDetector.forward, out hitInfo, detectionDistance, platformsLayer))
             {
@@ -94,6 +106,9 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             OnTriggerEnterBase(other);
 
             if(other.tag == "ClimbableWall" || other.tag == "UnclimbableWall")

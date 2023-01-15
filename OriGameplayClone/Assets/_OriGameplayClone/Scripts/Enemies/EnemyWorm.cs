@@ -16,11 +16,17 @@ namespace OriProject
 
         private void Update()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             BaseUpdateCall();
         }
 
         protected override void Attack()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             //float xPlayerDir = playerTransf.position.x - transform.position.x;
             //float rotAngle = xPlayerDir > 0.0f ? 0.0f : -180.0f;
             //transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, rotAngle, transform.rotation.eulerAngles.z);
@@ -41,6 +47,9 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             OnTriggerEnterBase(other);
         }
     }

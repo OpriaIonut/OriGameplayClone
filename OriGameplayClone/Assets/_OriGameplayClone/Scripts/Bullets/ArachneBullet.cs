@@ -15,7 +15,10 @@ namespace OriProject
 
         private void Update()
         {
-            if(isInitialized)
+            if (UIManager.Instance.GamePaused)
+                return;
+
+            if (isInitialized)
                 transform.Translate(direction * speed * Time.deltaTime);
         }
 
@@ -34,6 +37,9 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             if (hitPlayer && other.tag == "PlayerHitbox")
             {
                 PlayerLogic playerScript = other.transform.root.GetComponent<PlayerLogic>();

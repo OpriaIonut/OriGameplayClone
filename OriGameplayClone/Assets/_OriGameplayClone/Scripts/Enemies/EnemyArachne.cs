@@ -22,6 +22,9 @@ namespace OriProject
 
         private void Update()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             BaseUpdateCall();
 
             rope.SetPosition(0, transform.position);
@@ -32,6 +35,9 @@ namespace OriProject
         {
             while (true)
             {
+                if (UIManager.Instance.GamePaused)
+                    yield break;
+
                 if (Vector3.Distance(playerTransf.position, gfx.position) < status.range)
                 {
                     isPlayerInRange = true;
@@ -59,6 +65,9 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             OnTriggerEnterBase(other);
         }
 

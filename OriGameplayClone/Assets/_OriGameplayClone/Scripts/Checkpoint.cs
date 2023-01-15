@@ -33,6 +33,9 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             if (changedParticles == false && other.name == "GFX")
             {
                 PlayerLogic target = other.transform.root.GetComponent<PlayerLogic>();
@@ -45,6 +48,9 @@ namespace OriProject
 
         private void OnTriggerExit(Collider other)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             if (changedParticles == false && other.name == "GFX")
             {
                 PlayerLogic target = other.transform.root.GetComponent<PlayerLogic>();

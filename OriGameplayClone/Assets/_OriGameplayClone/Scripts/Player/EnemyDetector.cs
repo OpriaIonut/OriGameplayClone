@@ -22,6 +22,9 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             EnemyBase enemyScript = other.transform.root.GetComponent<EnemyBase>();
             if(enemyScript)
             {
@@ -31,6 +34,9 @@ namespace OriProject
 
         private void OnTriggerExit(Collider other)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             EnemyBase enemyScript = other.transform.root.GetComponent<EnemyBase>();
             if (enemyScript)
             {

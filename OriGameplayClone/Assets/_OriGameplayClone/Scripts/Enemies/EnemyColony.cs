@@ -28,6 +28,9 @@ namespace OriProject
 
         private void Update()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             BaseUpdateCall();
         }
 
@@ -69,6 +72,9 @@ namespace OriProject
 
         protected override void MovementLogic()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             if (isPlayerInRange && isGrounded)
             {
                 if (jumpMovement)
@@ -98,6 +104,9 @@ namespace OriProject
             {
                 yield return wait;
 
+                if (UIManager.Instance.GamePaused)
+                    yield break;
+
                 RaycastHit hitInfo;
                 if (Physics.Raycast(floorDetector.position, Vector3.down, out hitInfo, detectionDistance, platformsLayer))
                 {
@@ -114,6 +123,9 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             OnTriggerEnterBase(other);
         }
     }

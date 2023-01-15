@@ -32,6 +32,9 @@ namespace OriProject
 
         private void Update()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             if (isPlayerInRange && Time.time - lastAttackTime > status.attackCooldown)
             {
                 Attack();
@@ -41,12 +44,18 @@ namespace OriProject
 
         private void FixedUpdate()
         {
-            if(canMove)
+            if (UIManager.Instance.GamePaused)
+                return;
+
+            if (canMove)
                 MovementLogic();
         }
 
         protected override void MovementLogic()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             if (Time.time - pickTargetTime < moveDelay)
                 return;
 
@@ -90,6 +99,9 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             OnTriggerEnterBase(other);
         }
 

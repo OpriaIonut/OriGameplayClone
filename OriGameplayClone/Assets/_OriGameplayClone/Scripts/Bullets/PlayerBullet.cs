@@ -22,6 +22,9 @@ namespace OriProject
 
         private void Update()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             MoveBullet();
 
             if(enemyScript == null && currentInterpolation >= 1.0f)
@@ -81,6 +84,9 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             if (other.tag == "EnemyHitbox")
             {
                 EnemyBase script = other.transform.root.GetComponent<EnemyBase>();

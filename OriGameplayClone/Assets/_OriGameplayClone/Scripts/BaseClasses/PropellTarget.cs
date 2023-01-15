@@ -12,6 +12,9 @@ namespace OriProject
 
         public virtual void LaunchTarget(Vector3 direction)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             if (propellForce > 0.0f && Vector3.Distance(direction, Vector3.zero) > 0.01)
             {
                 Rigidbody rigidbody = targetTransf.GetComponent<Rigidbody>();

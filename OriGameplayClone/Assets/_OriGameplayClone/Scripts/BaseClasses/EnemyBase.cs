@@ -43,6 +43,9 @@ namespace OriProject
 
         protected virtual void  BaseUpdateCall()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             MovementLogic();
 
             if(isPlayerInRange && Time.time - lastAttackTime > status.attackCooldown)
@@ -93,7 +96,10 @@ namespace OriProject
             WaitForSeconds wait = new WaitForSeconds(0.1f);
             while(true)
             {
-                if(Vector3.Distance(playerTransf.position, transform.position) < status.range)
+                if (UIManager.Instance.GamePaused)
+                    yield break;
+
+                if (Vector3.Distance(playerTransf.position, transform.position) < status.range)
                 {
                     isPlayerInRange = true;
                 }
@@ -109,7 +115,10 @@ namespace OriProject
 
         protected virtual void OnTriggerEnterBase(Collider other)
         {
-            if(other.tag == "PlayerHitbox" && !damagedPlayer)
+            if (UIManager.Instance.GamePaused)
+                return;
+
+            if (other.tag == "PlayerHitbox" && !damagedPlayer)
             {
                 PlayerLogic playerLogic = other.transform.root.GetComponent<PlayerLogic>();
                 if (playerLogic)

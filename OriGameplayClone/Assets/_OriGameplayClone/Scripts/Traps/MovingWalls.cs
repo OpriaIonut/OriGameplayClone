@@ -44,6 +44,9 @@ namespace OriProject
 
         private void Update()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             if (reachedEnd && Time.time - reachEndTime < endMovementWaitTime)
                 return;
             else

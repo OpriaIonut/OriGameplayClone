@@ -23,6 +23,9 @@ namespace OriProject
 
         private void Update()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             float effectPerItem = 1.0f / (parallaxItems.Count - 1);
 
             for (int index = 0; index < parallaxItems.Count; index++)

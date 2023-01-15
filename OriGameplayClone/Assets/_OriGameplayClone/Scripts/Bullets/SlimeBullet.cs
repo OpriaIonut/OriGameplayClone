@@ -18,7 +18,10 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.tag == "PlayerHitbox")
+            if (UIManager.Instance.GamePaused)
+                return;
+
+            if (other.tag == "PlayerHitbox")
             {
                 PlayerLogic playerScript = other.transform.root.GetComponent<PlayerLogic>();
                 if(playerScript)

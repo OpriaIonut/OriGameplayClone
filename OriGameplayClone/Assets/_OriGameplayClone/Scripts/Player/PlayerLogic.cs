@@ -59,8 +59,12 @@ namespace OriProject
 
         private void Update()
         {
-            if(checkpointInRange && Input.GetKeyDown(KeyCode.E))
+            if (UIManager.Instance.GamePaused)
+                return;
+
+            if (checkpointInRange && Input.GetKeyDown(KeyCode.E))
             {
+                RestoreHP();
                 focusedCheckpoint.ChangeParticleDisplay();
                 SceneSaver.SaveGameData();
             }
@@ -168,8 +172,18 @@ namespace OriProject
             }
         }
 
+        public void RestoreHP()
+        {
+            currentHealth = maxHealth;
+            float healthBarFill = currentHealth / maxHealth;
+            healthBar.transform.localScale = new Vector3(healthBarFill, healthBar.transform.localScale.y, healthBar.transform.localScale.z);
+        }
+
         public void TakeDamage(float damage, Transform attackerTransf, bool addKnockback = true)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             currentHealth -= damage;
             if (currentHealth <= 0.0f)
                 Die();

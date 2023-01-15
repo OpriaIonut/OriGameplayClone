@@ -50,7 +50,10 @@ namespace OriProject
 
         private void Update()
         {
-            for(int index = 0; index < enemyCells.Count; index++)
+            if (UIManager.Instance.GamePaused)
+                return;
+
+            for (int index = 0; index < enemyCells.Count; index++)
             {
                 Vector3 screenPos = minimapCam.WorldToScreenPoint(enemyCells[index].transform.position);
                 screenPos.z = 0.0f;
@@ -72,7 +75,7 @@ namespace OriProject
 
         public void ColonyDeath(EnemyColony obj, EnemyColony spawnedChild1, EnemyColony spawnedChild2)
         {
-            for(int index = 0; index < enemyCells.Count; index++)
+            for (int index = 0; index < enemyCells.Count; index++)
             {
                 if(enemyCells[index] == obj)
                 {
@@ -96,6 +99,9 @@ namespace OriProject
                 clone.name = spawnedChild2.name;
                 enemyMarkers.Add(clone.GetComponent<RectTransform>());
             }
+
+            if (enemyMarkers.Count == 0)
+                UIManager.Instance.ShowPopup(true);
         }
     }
 }

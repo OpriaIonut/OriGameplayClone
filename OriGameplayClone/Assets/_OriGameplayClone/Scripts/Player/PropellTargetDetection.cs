@@ -17,6 +17,9 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             PropellTarget target = other.gameObject.GetComponent<PropellTarget>();
             if (target == null)
                 target = other.transform.root.GetComponent<PropellTarget>();
@@ -30,6 +33,9 @@ namespace OriProject
 
         private void OnTriggerExit(Collider other)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             PropellTarget target = other.gameObject.GetComponent<PropellTarget>();
             if (target == null)
                 target = other.transform.root.GetComponent<PropellTarget>();

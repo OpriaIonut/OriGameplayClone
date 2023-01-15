@@ -23,6 +23,9 @@ namespace OriProject
 
         private void Update()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             BaseUpdateCall();
         }
 
@@ -33,7 +36,10 @@ namespace OriProject
 
         protected override void MovementLogic()
         {
-            if(isPlayerInRange)
+            if (UIManager.Instance.GamePaused)
+                return;
+
+            if (isPlayerInRange)
             {
                 if (Time.time - lastMoveTime > moveDelay)
                 {
@@ -53,6 +59,9 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             this.OnTriggerEnterBase(other);
         }
     }

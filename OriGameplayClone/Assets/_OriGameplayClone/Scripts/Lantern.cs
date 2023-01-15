@@ -21,12 +21,18 @@ namespace OriProject
 
         private void Update()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             rope.SetPosition(0, transform.parent.position);
             rope.SetPosition(1, transform.position);
         }
 
         public override void OnPlayerEnteredRange()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             base.OnPlayerEnteredRange();
             lanternMat.color = Color.cyan;
             lanternMat.SetColor("_EmissionColor", Color.cyan);
@@ -34,6 +40,9 @@ namespace OriProject
 
         public override void OnPlayerExitedRange()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             base.OnPlayerExitedRange();
             lanternMat.color = initColor;
             lanternMat.SetColor("_EmissionColor", initEmissionColor);

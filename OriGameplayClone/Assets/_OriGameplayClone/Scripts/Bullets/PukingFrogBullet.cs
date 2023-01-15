@@ -26,6 +26,9 @@ namespace OriProject
 
         private void Update()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             MoveBullet();
         }
 
@@ -66,6 +69,9 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             if (!launchedTarget && other.tag == "PlayerHitbox")
             {
                 PlayerLogic script = other.transform.root.GetComponent<PlayerLogic>();

@@ -103,6 +103,9 @@ namespace OriProject
 
         private void Update()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             //Detect all input in update
             horizontalInput = Input.GetAxis("Horizontal");
 
@@ -231,6 +234,9 @@ namespace OriProject
 
         private void FixedUpdate()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             MovementLogic();
         }
 
@@ -245,6 +251,9 @@ namespace OriProject
             WaitForSeconds waitTime = new WaitForSeconds(0.1f);
             while(true)
             {
+                if (UIManager.Instance.GamePaused)
+                    yield break;
+
                 yield return waitTime;
 
                 RaycastHit hitInfo;
@@ -294,6 +303,9 @@ namespace OriProject
 
         public void AddKnockback(Vector3 dir)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             knockbackDir = dir;
             knockBackAmount = knockbackPower;
         }
@@ -310,6 +322,9 @@ namespace OriProject
 
         private PropellTarget FindNearestPropellTarget()
         {
+            if (UIManager.Instance.GamePaused)
+                return null;
+
             PropellTarget foundTarget = null;
             float minDist = float.MaxValue;
             for(int index = 0; index < propellTargets.Count; index++)
@@ -332,6 +347,9 @@ namespace OriProject
 
         private void MovementLogic()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             Vector3 velocity = rb.velocity;
 
             float currentMoveDir = horizontalInput > 0.0f ? 1.0f : -1.0f;

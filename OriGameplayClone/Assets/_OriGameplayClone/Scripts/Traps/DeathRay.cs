@@ -32,6 +32,9 @@ namespace OriProject
         {
             while (true)
             {
+                if (UIManager.Instance.GamePaused)
+                    yield break;
+
                 float startFireTime = Time.time;
                 if (startDelay > 0.0f)
                     startFireTime += startDelay;
@@ -77,7 +80,10 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.tag == "PlayerHitbox")
+            if (UIManager.Instance.GamePaused)
+                return;
+
+            if (other.tag == "PlayerHitbox")
             {
                 PlayerLogic script = other.transform.root.GetComponent<PlayerLogic>();
                 if(script)

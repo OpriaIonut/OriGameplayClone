@@ -12089,7 +12089,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1511625853808039371, guid: 396c2cb44d707ef4b890bb4c34af7872, type: 3}
       propertyPath: fireDuration
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 396c2cb44d707ef4b890bb4c34af7872, type: 3}
@@ -21954,9 +21954,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 158227790}
     - target: {fileID: 1727924977117713590, guid: be857839962066649b5fb230df4b1326, type: 3}
+      propertyPath: damage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1727924977117713590, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: healthBar
       value: 
       objectReference: {fileID: 1434544812}
+    - target: {fileID: 1727924977117713590, guid: be857839962066649b5fb230df4b1326, type: 3}
+      propertyPath: maxHealth
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 1727924977117713590, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: savePopupText
       value: 
@@ -21983,11 +21991,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1727924978403786163, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 60.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1727924978403786163, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 63.5
+      value: 1.1
       objectReference: {fileID: 0}
     - target: {fileID: 1727924978403786163, guid: be857839962066649b5fb230df4b1326, type: 3}
       propertyPath: m_LocalPosition.z

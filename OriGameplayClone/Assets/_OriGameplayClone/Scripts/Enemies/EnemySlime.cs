@@ -35,12 +35,18 @@ namespace OriProject
 
         private void Update()
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             BaseUpdateCall();
         }
 
         protected override void Attack()
         {
-            for(int index = 0; index < numOfBullets; index++)
+            if (UIManager.Instance.GamePaused)
+                return;
+
+            for (int index = 0; index < numOfBullets; index++)
             {
                 GameObject clone = Instantiate(bulletPrefab);
                 clone.transform.position = transform.position;
@@ -59,7 +65,10 @@ namespace OriProject
 
         protected override void MovementLogic()
         {
-            if(Vector3.Distance(transform.position, targetWaypoint) < 0.1f)
+            if (UIManager.Instance.GamePaused)
+                return;
+
+            if (Vector3.Distance(transform.position, targetWaypoint) < 0.1f)
             {
                 pickedWaypoint1 = !pickedWaypoint1;
                 targetWaypoint = pickedWaypoint1 ? waypoint1 : waypoint2;
@@ -70,6 +79,9 @@ namespace OriProject
 
         private void OnTriggerEnter(Collider other)
         {
+            if (UIManager.Instance.GamePaused)
+                return;
+
             OnTriggerEnterBase(other);
         }
 
