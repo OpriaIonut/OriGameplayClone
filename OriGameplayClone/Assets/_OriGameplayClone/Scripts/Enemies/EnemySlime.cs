@@ -8,6 +8,7 @@ namespace OriProject
     {
         public Transform waypointTransf1;
         public Transform waypointTransf2;
+        public Transform firePointTransf;
 
         public GameObject bulletPrefab;
         public int numOfBullets = 3;
@@ -49,7 +50,7 @@ namespace OriProject
             for (int index = 0; index < numOfBullets; index++)
             {
                 GameObject clone = Instantiate(bulletPrefab);
-                clone.transform.position = transform.position;
+                clone.transform.position = firePointTransf.position;
 
                 SlimeBullet script = clone.GetComponent<SlimeBullet>();
 

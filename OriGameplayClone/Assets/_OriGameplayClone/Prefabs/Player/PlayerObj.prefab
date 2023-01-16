@@ -10283,6 +10283,7 @@ MonoBehaviour:
   stompGravityLimiter: 40
   stompParticles: {fileID: 90467119}
   arrowSprite: {fileID: 0}
+  dashLines: []
 --- !u!114 &1727924977117713590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10297,6 +10298,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   healthBar: {fileID: 0}
+  savePopupText: {fileID: 0}
   damage: 10
   radius: 10
   shotsBeforeDelay: 5
